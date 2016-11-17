@@ -1,0 +1,48 @@
+{
+    "name": "sebdesign/artisan-cloudflare",
+    "description": "Laravel artisan commands for Cloudflare",
+    "keywords": [
+        "cloudflare",
+        "api",
+        "laravel",
+        "artisan"
+    ],
+    "homepage": "https://github.com/sebdesign/artisan-cloudflare",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sébastien Nikolaou",
+            "email": "info@sebdesign.eu",
+            "homepage": "https://sebdesign.eu",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^5.5.9 || ^7.0",
+        "guzzlehttp/guzzle": "^6.0",
+        "illuminate/console": "5.1.* || 5.2.* || 5.3.*",
+        "illuminate/support": "5.1.* || 5.2.* || 5.3.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8 || ^5.0",
+        "orchestra/testbench": "3.1.* || 3.2.* || 3.3.*",
+        "mockery/mockery": "~0.9.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sebdesign\\ArtisanCloudflare\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sebdesign\\ArtisanCloudflare\\Test\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable"
+}
