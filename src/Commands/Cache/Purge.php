@@ -41,7 +41,7 @@ class Purge extends Command
     private $client;
 
     /**
-     * API item identifier tags
+     * API item identifier tags.
      *
      * @var \Illuminate\Support\Collection
      */

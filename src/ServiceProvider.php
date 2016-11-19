@@ -3,7 +3,6 @@
 namespace Sebdesign\ArtisanCloudflare;
 
 use GuzzleHttp\Client as GuzzleClient;
-
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
@@ -74,7 +73,7 @@ class ServiceProvider extends IlluminateServiceProvider
 
     protected function registerMacros()
     {
-        /**
+        /*
          * Transpose with keys.
          *
          * Implementation for PHP < 5.6 and Laravel ~5.1.
@@ -93,7 +92,7 @@ class ServiceProvider extends IlluminateServiceProvider
             return new static(call_user_func_array('array_map', $params));
         });
 
-        /**
+        /*
          * Add a value between each item.
          *
          * @param  mixed $value
@@ -105,7 +104,7 @@ class ServiceProvider extends IlluminateServiceProvider
             })->forget(0)->values();
         });
 
-        /**
+        /*
          * Fill the collection with a value, using its keys.
          *
          * @param  mixed $value
