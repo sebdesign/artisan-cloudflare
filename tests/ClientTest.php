@@ -91,7 +91,7 @@ class ClientTest extends TestCase
                 (object) [
                     'code' => 0,
                     'message' => 'Connection error',
-                ]
+                ],
             ],
         ], $responseA);
 
@@ -101,7 +101,7 @@ class ClientTest extends TestCase
                 (object) [
                     'code' => 500,
                     'message' => 'Fatal error',
-                ]
+                ],
             ],
         ], $responseB);
     }

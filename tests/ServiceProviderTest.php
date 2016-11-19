@@ -132,5 +132,4 @@ class ServiceProviderTest extends TestCase
     {
         return key(ServiceProvider::pathsToPublish(null, 'config'));
     }
-
 }

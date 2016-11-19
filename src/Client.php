@@ -81,7 +81,7 @@ class Client
                 (object) [
                     'code' => $e->getCode(),
                     'message' => $message,
-                ]
+                ],
             ],
         ];
 

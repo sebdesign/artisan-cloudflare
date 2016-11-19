@@ -2,17 +2,17 @@
 
 return [
 
-    /**
+    /*
      * API key generated on the "My Account" page.
      */
     'key' => env('CLOUDFLARE_KEY'),
 
-    /**
+    /*
      * Email address associated with your account.
      */
     'email' => env('CLOUDFLARE_EMAIL'),
 
-    /**
+    /*
      * Array of zones.
      *
      * Each zone must have its identifier as a key. The value is an
