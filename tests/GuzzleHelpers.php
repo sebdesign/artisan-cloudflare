@@ -93,7 +93,7 @@ trait GuzzleHelpers
         ]);
     }
 
-    protected function mockErrorResponse(array $errors)
+    protected function mockClientErrorResponse(array $errors)
     {
         return $this->mockResponse(400, [], [
             'success' => false,

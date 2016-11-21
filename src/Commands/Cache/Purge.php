@@ -116,15 +116,17 @@ class Purge extends Command
      */
     private function purge(Collection $parameters)
     {
-        return $parameters->map(function ($params) {
+        $zones = $parameters->map(function ($params) {
             if ($params->isEmpty()) {
                 return ['purge_everything' => true];
             }
 
             return $params->toArray();
-        })->map(function ($params, $identifier) {
-            return $this->client->delete("zones/{$identifier}/purge_cache", $params);
         });
+
+        $results = $this->client->purge($zones);
+
+        return $results->reorder($zones->keys());
     }
 
     /**

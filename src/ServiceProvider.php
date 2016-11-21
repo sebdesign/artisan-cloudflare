@@ -113,6 +113,20 @@ class ServiceProvider extends IlluminateServiceProvider
         Collection::macro('fill', function ($value) {
             return new static(array_fill_keys($this->keys()->all(), $value));
         });
+
+        /*
+         * Reorder the collection according to an array of keys
+         *
+         * @param  mixed $keys
+         * @return \Illuminate\Support\Collection
+         */
+        Collection::macro('reorder', function ($keys) {
+            $order = $this->getArrayableItems($keys);
+
+            return $this->sortBy(function ($item, $key) use ($order) {
+                return array_search($key, $order);
+            });
+        });
     }
 
     /**

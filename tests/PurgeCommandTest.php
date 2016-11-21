@@ -72,12 +72,12 @@ class PurgeCommandTest extends TestCase
     {
         // Arrange
 
-        $this->mockErrorResponse([[
+        $this->mockClientErrorResponse([[
             'code' => 42,
             'message' => 'Error message',
         ]]);
 
-        $this->mockErrorResponse([[
+        $this->mockClientErrorResponse([[
             'code' => 43,
             'message' => 'Another error message',
         ]]);

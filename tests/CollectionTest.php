@@ -118,4 +118,35 @@ class CollectionTest extends TestCase
 
         $this->assertEquals(collect($expected), $actual);
     }
+
+    /**
+     * @test
+     */
+    public function it_reorders_a_collection()
+    {
+        // Arrange
+
+        $items = [
+            'bar' => 'first',
+            'baz' => 'second',
+            'foo' => 'third',
+        ];
+
+        $expected = [
+            'foo' => 'third',
+            'bar' => 'first',
+            'baz' => 'second',
+        ];
+
+
+        $keys = ['foo', 'bar', 'baz'];
+
+        // Act
+
+        $actual = collect($items)->reorder($keys);
+
+        // Assert
+
+        $this->assertEquals(collect($expected), $actual);
+    }
 }

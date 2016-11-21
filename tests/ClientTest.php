@@ -23,7 +23,7 @@ class ClientTest extends TestCase
     /**
      * @test
      */
-    public function it_makes_a_delete_request_to_a_uri_with_a_body()
+    public function it_purges_a_zone_with_success()
     {
         // Arrange
 
@@ -32,14 +32,15 @@ class ClientTest extends TestCase
 
         // Act
 
-        $response = $client->delete('foo', ['bar' => 'baz']);
+        $results = $client->purge(collect(['foo' => ['bar' => 'baz']]));
 
         // Assert
 
         $this->assertCount(1, $this->transactions);
+        $this->assertCount(1, $results);
         $this->seeRequestWithBody($this->transactions->first(), ['bar' => 'baz']);
         $this->seeRequestContainsPath($this->transactions->first(), 'foo');
-        $this->assertEquals((object) ['success' => true], $response);
+        $this->assertEquals((object) ['success' => true], $results->get('foo'));
     }
 
     /**
@@ -50,19 +51,22 @@ class ClientTest extends TestCase
         // Arrange
 
         $client = $this->app[Client::class];
-        $this->mockErrorResponse(['error']);
+        $this->mockClientErrorResponse(['error']);
 
         // Act
 
-        $response = $client->delete('foo', ['bar' => 'baz']);
+        $results = $client->purge(collect(['foo' => ['bar' => 'baz']]));
 
         // Assert
 
         $this->assertCount(1, $this->transactions);
+        $this->assertCount(1, $results);
+        $this->seeRequestWithBody($this->transactions->first(), ['bar' => 'baz']);
+        $this->seeRequestContainsPath($this->transactions->first(), 'foo');
         $this->assertEquals((object) [
             'success' => false,
             'errors' => ['error'],
-        ], $response);
+        ], $results->get('foo'));
     }
 
     /**
@@ -78,13 +82,17 @@ class ClientTest extends TestCase
 
         // Act
 
-        $responseA = $client->delete('foo', ['bar' => 'baz']);
-        $responseB = $client->delete('foo', ['bar' => 'baz']);
+        $results = $client->purge(collect([
+            'foo' => ['bar' => 'baz'],
+            'bar' => ['baz' => 'qux'],
+        ]));
 
         // Assert
 
         $this->assertCount(2, $this->transactions);
-
+        $this->assertCount(2, $results);
+        $this->seeRequestWithBody($this->transactions->get(0), ['bar' => 'baz']);
+        $this->seeRequestContainsPath($this->transactions->get(0), 'foo');
         $this->assertEquals((object) [
             'success' => false,
             'errors' => [
@@ -93,8 +101,10 @@ class ClientTest extends TestCase
                     'message' => 'Connection error',
                 ],
             ],
-        ], $responseA);
+        ], $results->get('foo'));
 
+        $this->seeRequestWithBody($this->transactions->get(1), ['baz' => 'qux']);
+        $this->seeRequestContainsPath($this->transactions->get(1), 'bar');
         $this->assertEquals((object) [
             'success' => false,
             'errors' => [
@@ -103,6 +113,6 @@ class ClientTest extends TestCase
                     'message' => 'Fatal error',
                 ],
             ],
-        ], $responseB);
+        ], $results->get('bar'));
     }
 }

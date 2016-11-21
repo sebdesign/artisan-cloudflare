@@ -2,10 +2,13 @@
 
 namespace Sebdesign\ArtisanCloudflare;
 
+use GuzzleHttp\Promise;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
+
+use Illuminate\Support\Collection;
 use Illuminate\Contracts\Logging\Log;
 
 class Client
@@ -38,27 +41,79 @@ class Client
     }
 
     /**
-     * Make a DELETE request.
+     * Delete all the given zones with their options.
      *
-     * @param  string $url
-     * @param  array  $options
-     * @return object
+     * All the requests are asynchronous and sent concurrently.
+     *
+     * The promise waits until all the promises have been resolved or rejected
+     * and returns the results of each request.
+     *
+     * @param  \Illuminate\Support\Collection $zones
+     * @return \Illuminate\Support\Collection
      */
-    public function delete($url, array $options = [])
+    public function purge(Collection $zones)
     {
-        try {
-            $response = $this->client->delete($url, [
+        $promises = $zones->map(function ($options, $identifier) {
+            return $this->client->deleteAsync("zones/{$identifier}/purge_cache", [
                 \GuzzleHttp\RequestOptions::JSON => $options,
             ]);
-        } catch (ClientException $e) {
-            $response = $e->getResponse();
-        } catch (RequestException $e) {
-            $this->logger->error($e);
+        });
 
-            return $this->handleException($e);
-        }
+        return $this->settle($promises)->wait();
+    }
 
-        return $this->getBody($response);
+    /**
+     * Returns a promise that is fulfilled when all of the provided promises have
+     * been fulfilled or rejected.
+     *
+     * The returned promise is fulfilled with a collection of results.
+     *
+     * @param Illuminate\Support\Collection $promises
+     * @return GuzzleHttp\Promise\PromiseInterface
+     */
+    protected function settle(Collection $promises)
+    {
+        $results = collect();
+
+        return Promise\each(
+            $promises->toArray(),
+            $this->onFulfilled($results),
+            $this->onRejected($results)
+        )->then(function () use (&$results) {
+            return $results;
+        });
+    }
+
+    /**
+     * Put the body of the fulfilled promise into the results.
+     *
+     * @param  \Illuminate\Support\Collection $results
+     * @return Closure
+     */
+    protected function onFulfilled(Collection &$results)
+    {
+        return function ($value, $identifier) use (&$results) {
+            return $results->put($identifier, $this->getBody($value));
+        };
+    }
+
+    /**
+     * Handle the rejected promise and put the errors into the results.
+     *
+     * @param  \Illuminate\Support\Collection $results
+     * @return Closure
+     */
+    protected function onRejected(Collection &$results)
+    {
+        return function ($reason, $identifier) use (&$results) {
+            if ($reason instanceof ClientException) {
+                return $results->put($identifier, $this->getBody($reason->getResponse()));
+            }
+
+            $this->logger->error($reason);
+
+            return $results->put($identifier, $this->handleException($reason));
+        };
     }
 
     /**
