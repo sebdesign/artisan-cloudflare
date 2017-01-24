@@ -138,7 +138,6 @@ class CollectionTest extends TestCase
             'baz' => 'second',
         ];
 
-
         $keys = ['foo', 'bar', 'baz'];
 
         // Act
