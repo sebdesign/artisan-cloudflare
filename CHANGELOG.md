@@ -2,6 +2,10 @@
 
 All notable changes to `artisan-cloudflare` will be documented in this file.
 
+## 1.1.1 - 2017-01-24
+
+- Added support for Laravel 5.4
+
 ## 1.1.0 - 2016-11-22
 
 - All the requests to the CloudFlare API are now asynchronous and sent concurrently.
