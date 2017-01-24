@@ -2,8 +2,8 @@
 
 namespace Sebdesign\ArtisanCloudflare;
 
-use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\Collection;
+use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
 class ServiceProvider extends IlluminateServiceProvider

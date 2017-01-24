@@ -2,14 +2,14 @@
 
 namespace Sebdesign\ArtisanCloudflare\Test;
 
-use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Client as GuzzleClient;
 use Sebdesign\ArtisanCloudflare\Client;
+use GuzzleHttp\Exception\RequestException;
 
 trait GuzzleHelpers
 {

@@ -5,10 +5,10 @@ namespace Sebdesign\ArtisanCloudflare;
 use GuzzleHttp\Promise;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\Logging\Log;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 
 class Client
 {
