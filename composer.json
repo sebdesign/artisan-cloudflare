@@ -44,5 +44,10 @@
     "config": {
         "sort-packages": true
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "extra": {
+        "laravel": {
+            "providers": "Sebdesign\\ArtisanCloudflare\\ServiceProvider"
+        }
+    }
 }
