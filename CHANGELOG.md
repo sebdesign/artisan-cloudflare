@@ -2,6 +2,10 @@
 
 All notable changes to `artisan-cloudflare` will be documented in this file.
 
+## 1.1.2 - 2017-08-26
+
+- Support package auto-discovery for Laravel 5.5
+
 ## 1.1.1 - 2017-01-24
 
 - Added support for Laravel 5.4
