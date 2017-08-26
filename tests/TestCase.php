@@ -49,6 +49,6 @@ abstract class TestCase extends BaseTestCase
      */
     protected function registerServiceProvider()
     {
-        $this->app->registerDeferredProvider(ServiceProvider::class);
+        $this->app->register(new ServiceProvider($this->app), [], true);
     }
 }
