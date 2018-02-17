@@ -2,6 +2,11 @@
 
 All notable changes to `artisan-cloudflare` will be documented in this file.
 
+## 1.2.0 - 2018-02-17
+
+- Add support for Laravel 5.6
+- Purge files by host
+
 ## 1.1.3 - 2017-08-30
 
 - Update dev-dependencies for Laravel 5.5
