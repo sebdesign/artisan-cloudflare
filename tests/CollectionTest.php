@@ -96,32 +96,6 @@ class CollectionTest extends TestCase
     /**
      * @test
      */
-    public function it_fills_a_collection_with_a_value()
-    {
-        // Arrange
-
-        $items = [
-            'foo' => 'bar',
-            'baz' => 'qux',
-        ];
-
-        $expected = [
-            'foo' => 'quux',
-            'baz' => 'quux',
-        ];
-
-        // Act
-
-        $actual = collect($items)->fill('quux');
-
-        // Assert
-
-        $this->assertEquals(collect($expected), $actual);
-    }
-
-    /**
-     * @test
-     */
     public function it_reorders_a_collection()
     {
         // Arrange

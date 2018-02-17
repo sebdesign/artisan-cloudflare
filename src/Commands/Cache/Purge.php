@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Sebdesign\ArtisanCloudflare\Client;
 use Symfony\Component\Console\Helper\TableCell;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\Console\Helper\TableSeparator;
 
 class Purge extends Command
@@ -24,7 +25,8 @@ class Purge extends Command
      */
     protected $signature = 'cloudflare:cache:purge {zone? : A zone identifier.}
       {--file=* : One or more files that should be removed from the cache.}
-      {--tag=* : One or more tags that should be removed from the cache.}';
+      {--tag=* : One or more tags that should be removed from the cache.}
+      {--host=* : One or more hosts that should be removed from the cache.}';
 
     /**
      * The name and signature of the console command.
@@ -43,7 +45,7 @@ class Purge extends Command
     /**
      * API item identifier tags.
      *
-     * @var \Illuminate\Support\Collection
+     * @var \Illuminate\Support\Collection<string, \Symfony\Component\HttpFoundation\ParameterBag>
      */
     private $zones;
 
@@ -58,7 +60,10 @@ class Purge extends Command
         parent::__construct();
 
         $this->client = $client;
-        $this->zones = collect($zones);
+
+        $this->zones = collect($zones)->map(function ($zone) {
+            return new ParameterBag(array_filter($zone));
+        });
     }
 
     /**
@@ -76,55 +81,57 @@ class Purge extends Command
             return 1;
         }
 
-        $parameters = $this->getParameters($zones);
-        $results = $this->purge($parameters);
+        $zones = $this->applyParameters($zones);
 
-        $this->displayResults($parameters, $results);
+        $results = $this->purge($zones);
+
+        $this->displayResults($zones, $results);
 
         return $this->getExitCode($results);
     }
 
     /**
-     * Get the paremeters for each zone.
+     * Apply the paremeters for each zone.
      *
      * Use the config for each zone, unless options are passed in the command.
      *
-     * @param  \Illuminate\Support\Collection $zones
-     * @return \Illuminate\Support\Collection
+     * @param  \Illuminate\Support\Collection<string, \Symfony\Component\HttpFoundation\ParameterBag> $zones
+     * @return \Illuminate\Support\Collection<string, \Symfony\Component\HttpFoundation\ParameterBag>
      */
-    private function getParameters(Collection $zones)
+    private function applyParameters(Collection $zones)
     {
-        $defaults = collect([
+        $defaults = array_filter([
             'files' => $this->option('file'),
             'tags' => $this->option('tag'),
-        ])->filter();
+            'hosts' => $this->option('host'),
+        ]);
 
-        if (! $defaults->isEmpty()) {
-            return $zones->fill($defaults);
+        if (empty($defaults)) {
+            return $zones;
         }
 
-        return $zones->map(function ($zone) {
-            return collect($zone)->filter()->only('files', 'tags');
+        return $zones->each(function ($zone) use ($defaults) {
+            $zone->replace($defaults);
         });
     }
 
     /**
      * Execute the purging operations and return each result.
      *
-     * @param  \Illuminate\Support\Collection $parameters
-     * @return \Illuminate\Support\Collection
+     * @param  \Illuminate\Support\Collection<string, \Symfony\Component\HttpFoundation\ParameterBag> $zones
+     * @return \Illuminate\Support\Collection<string, object>
      */
-    private function purge(Collection $parameters)
+    private function purge(Collection $zones)
     {
-        $zones = $parameters->map(function ($params) {
-            if ($params->isEmpty()) {
-                return ['purge_everything' => true];
+        $parameters = $zones->map(function ($zone) {
+            if ($zone->count()) {
+                return $zone->all();
             }
 
-            return $params->toArray();
+            return ['purge_everything' => true];
         });
 
-        $results = $this->client->purge($zones);
+        $results = $this->client->purge($parameters);
 
         return $results->reorder($zones->keys());
     }
@@ -132,13 +139,13 @@ class Purge extends Command
     /**
      * Display a table with the results.
      *
-     * @param  \Illuminate\Support\Collection $parameters
-     * @param  \Illuminate\Support\Collection $results
+     * @param  \Illuminate\Support\Collection<string, \Symfony\Component\HttpFoundation\ParameterBag> $zones
+     * @param  \Illuminate\Support\Collection<string, object> $results
      * @return void
      */
-    private function displayResults(Collection $parameters, Collection $results)
+    private function displayResults(Collection $zones, Collection $results)
     {
-        $headers = ['Status', 'Zone', 'Files', 'Tags', 'Errors'];
+        $headers = ['Status', 'Zone', 'Files', 'Tags', 'Hosts', 'Errors'];
 
         $title = [
             new TableCell(
@@ -153,34 +160,36 @@ class Purge extends Command
         });
 
         // Get the zone identifiers
-        $identifiers = $parameters->keys();
+        $identifiers = $zones->keys();
 
         // Get the files as multiline strings
-        $files = $parameters->pluck('files')
-            ->map(function ($files) {
-                return $this->formatItems($files);
-            });
+        $files = $zones->map(function ($zones) {
+            return $this->formatItems($zones->get('files'));
+        });
 
         // Get the tags as multiline strings
-        $tags = $parameters->pluck('tags')
-            ->map(function ($tags) {
-                return $this->formatItems($tags);
-            });
+        $tags = $zones->map(function ($zones) {
+            return $this->formatItems($zones->get('tags'));
+        });
+
+        // Get the hosts as multiline strings
+        $hosts = $zones->map(function ($zones) {
+            return $this->formatItems($zones->get('hosts'));
+        });
 
         // Get the errors as red multiline strings
-        $errors = $results->pluck('errors')
-            ->map(function (array $errors) {
-                return $this->formatErrors($errors);
-            })
-            ->map(function (array $errors) {
-                return $this->formatItems($errors);
-            });
+        $errors = $results->map(function ($result) {
+            return $this->formatErrors($result->errors);
+        })->map(function ($errors) {
+            return $this->formatItems($errors);
+        });
 
         $columns = collect([
             'status' => $emoji,
             'identifier' => $identifiers,
             'files' => $files,
             'tags' => $tags,
+            'hosts' => $hosts,
             'errors' => $errors,
         ]);
 
@@ -203,8 +212,8 @@ class Purge extends Command
     /**
      * Format the errors.
      *
-     * @param  array  $errors
-     * @return array
+     * @param  object[] $errors
+     * @return string[]
      */
     private function formatErrors(array $errors)
     {
@@ -220,7 +229,7 @@ class Purge extends Command
     /**
      * Get the zone identifier from the input argument or the configuration.
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection<string, \Symfony\Component\HttpFoundation\ParameterBag>
      */
     private function getZones()
     {
@@ -235,7 +244,7 @@ class Purge extends Command
         }
 
         return collect([
-            $zone => [],
+            $zone => new ParameterBag(),
         ]);
     }
 

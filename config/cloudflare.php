@@ -29,6 +29,10 @@ return [
      *          'styles',
      *          'scripts',
      *      ],
+     *      'hosts' => [
+     *          'www.example.com',
+     *          'images.example.com',
+     *      ],
      * ],
      */
     'zones' => [

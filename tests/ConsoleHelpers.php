@@ -7,6 +7,13 @@ use Illuminate\Contracts\Console\Kernel;
 trait ConsoleHelpers
 {
     /**
+     * The exit code from the last command.
+     *
+     * @var int
+     */
+    protected $code;
+
+    /**
      * The output from the last command.
      *
      * @var string

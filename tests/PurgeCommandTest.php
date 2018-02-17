@@ -267,12 +267,49 @@ class PurgeCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_accepts_files_and_tags()
+    public function it_accepts_hosts()
+    {
+        // Arrange
+
+        $hosts = ['images.example.com'];
+
+        $this->mockSuccessResponse();
+        $this->mockSuccessResponse();
+
+        // Act
+
+        $this->artisan('cloudflare:cache:purge', ['--host' => $hosts]);
+
+        // Assert
+
+        $this->assertCount(2, $this->transactions);
+
+        $zoneA = $this->transactions->get(0);
+        $zoneB = $this->transactions->get(1);
+
+        $this->seeRequestContainsPath($zoneA, 'zone-identifier');
+        $this->seeRequestWithBody($zoneA, compact('hosts'));
+
+        $this->seeRequestContainsPath($zoneB, 'another-identifier');
+        $this->seeRequestWithBody($zoneB, compact('hosts'));
+
+        $this->seeInConsole('zone-identifier')
+            ->seeInConsole('another-identifier')
+            ->seeInConsole('images.example.com')
+            ->dontSeeInConsole('www.example.com')
+            ->withSuccessCode();
+    }
+
+    /**
+     * @test
+     */
+    public function it_accepts_files_and_tags_and_hosts()
     {
         // Arrange
 
         $files = [url('app.css'), url('logo.svg')];
         $tags = ['images'];
+        $hosts = ['www.example.com'];
 
         $this->mockSuccessResponse();
         $this->mockSuccessResponse();
@@ -282,6 +319,7 @@ class PurgeCommandTest extends TestCase
         $this->artisan('cloudflare:cache:purge', [
             '--file' => $files,
             '--tag' => $tags,
+            '--host' => $hosts,
         ]);
 
         // Assert
@@ -292,10 +330,10 @@ class PurgeCommandTest extends TestCase
         $zoneB = $this->transactions->get(1);
 
         $this->seeRequestContainsPath($zoneA, 'zone-identifier');
-        $this->seeRequestWithBody($zoneA, compact('files', 'tags'));
+        $this->seeRequestWithBody($zoneA, compact('files', 'tags', 'hosts'));
 
         $this->seeRequestContainsPath($zoneB, 'another-identifier');
-        $this->seeRequestWithBody($zoneB, compact('files', 'tags'));
+        $this->seeRequestWithBody($zoneB, compact('files', 'tags', 'hosts'));
 
         $this->seeInConsole('zone-identifier')
             ->seeInConsole('another-identifier')
@@ -303,6 +341,8 @@ class PurgeCommandTest extends TestCase
             ->seeInConsole('logo.svg')
             ->seeInConsole('images')
             ->dontSeeInConsole('scripts')
+            ->seeInConsole('www.example.com')
+            ->dontSeeInConsole('images.example.com')
             ->withSuccessCode();
     }
 
@@ -315,6 +355,7 @@ class PurgeCommandTest extends TestCase
 
         $files = [url('app.css'), url('logo.svg')];
         $tags = ['scripts'];
+        $hosts = ['images.example.com'];
 
         $this->mockSuccessResponse();
 
@@ -324,6 +365,7 @@ class PurgeCommandTest extends TestCase
             'zone' => 'my-zone',
             '--file' => $files,
             '--tag' => $tags,
+            '--host' => $hosts,
         ]);
 
         // Assert
@@ -331,7 +373,7 @@ class PurgeCommandTest extends TestCase
         $this->assertCount(1, $this->transactions);
 
         $this->seeRequestContainsPath($this->transactions->first(), 'my-zone');
-        $this->seeRequestWithBody($this->transactions->first(), compact('files', 'tags'));
+        $this->seeRequestWithBody($this->transactions->first(), compact('files', 'tags', 'hosts'));
 
         $this->seeInConsole('my-zone')
             ->seeInConsole('app.css')
@@ -339,6 +381,8 @@ class PurgeCommandTest extends TestCase
             ->seeInConsole('scripts')
             ->dontSeeInConsole('zone-identifier')
             ->dontSeeInConsole('another-identifier')
+            ->seeInConsole('images.example.com')
+            ->dontSeeInConsole('www.example.com')
             ->withSuccessCode();
     }
 }

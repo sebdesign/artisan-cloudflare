@@ -35,6 +35,7 @@ abstract class TestCase extends BaseTestCase
                 'zone-identifier' => [
                     'files' => [url('css/app.css')],
                     'tags' => ['scripts'],
+                    'hosts' => ['www.example.com'],
                 ],
                 'another-identifier' => [
                 ],

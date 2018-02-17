@@ -83,11 +83,9 @@ class ServiceProvider extends IlluminateServiceProvider
         Collection::macro('_transpose', function () {
             $keys = $this->keys()->all();
 
-            $callback = function () use ($keys) {
+            $params = array_merge([function () use ($keys) {
                 return new static(array_combine($keys, func_get_args()));
-            };
-
-            $params = array_merge([$callback], $this->toArray());
+            }], $this->toArray());
 
             return new static(call_user_func_array('array_map', $params));
         });
@@ -102,16 +100,6 @@ class ServiceProvider extends IlluminateServiceProvider
             return $this->values()->flatMap(function ($item, $index) use ($value) {
                 return [$index ? $value : null, $item];
             })->forget(0)->values();
-        });
-
-        /*
-         * Fill the collection with a value, using its keys.
-         *
-         * @param  mixed $value
-         * @return \Illuminate\Support\Collection
-         */
-        Collection::macro('fill', function ($value) {
-            return new static(array_fill_keys($this->keys()->all(), $value));
         });
 
         /*

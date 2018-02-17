@@ -40,21 +40,21 @@ class Client
     }
 
     /**
-     * Delete all the given zones with their options.
+     * Delete all the given zones with their parameters.
      *
      * All the requests are asynchronous and sent concurrently.
      *
      * The promise waits until all the promises have been resolved or rejected
      * and returns the results of each request.
      *
-     * @param  \Illuminate\Support\Collection $zones
-     * @return \Illuminate\Support\Collection
+     * @param  \Illuminate\Support\Collection<string, array>  $parameters
+     * @return \Illuminate\Support\Collection<string, object>
      */
-    public function purge(Collection $zones)
+    public function purge(Collection $parameters)
     {
-        $promises = $zones->map(function ($options, $identifier) {
+        $promises = $parameters->map(function ($parameters, $identifier) {
             return $this->client->deleteAsync("zones/{$identifier}/purge_cache", [
-                \GuzzleHttp\RequestOptions::JSON => $options,
+                \GuzzleHttp\RequestOptions::JSON => $parameters,
             ]);
         });
 
@@ -67,8 +67,8 @@ class Client
      *
      * The returned promise is fulfilled with a collection of results.
      *
-     * @param Illuminate\Support\Collection $promises
-     * @return GuzzleHttp\Promise\PromiseInterface
+     * @param  \Illuminate\Support\Collection<string, \GuzzleHttp\Promise\PromiseInterface> $promises
+     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     protected function settle(Collection $promises)
     {
@@ -78,7 +78,7 @@ class Client
             $promises->toArray(),
             $this->onFulfilled($results),
             $this->onRejected($results)
-        )->then(function () use (&$results) {
+        )->then(function () use ($results) {
             return $results;
         });
     }
@@ -86,50 +86,53 @@ class Client
     /**
      * Put the body of the fulfilled promise into the results.
      *
-     * @param  \Illuminate\Support\Collection $results
-     * @return Closure
+     * @param  \Illuminate\Support\Collection<string, object> $results
+     * @return \Closure
      */
-    protected function onFulfilled(Collection &$results)
+    protected function onFulfilled(Collection $results)
     {
-        return function ($value, $identifier) use (&$results) {
-            return $results->put($identifier, $this->getBody($value));
+        return function ($response, $identifier) use ($results) {
+            return $results->put($identifier, $this->getBody($response));
         };
     }
 
     /**
      * Handle the rejected promise and put the errors into the results.
      *
-     * @param  \Illuminate\Support\Collection $results
-     * @return Closure
+     * @param  \Illuminate\Support\Collection<string, object> $results
+     * @return \Closure
      */
-    protected function onRejected(Collection &$results)
+    protected function onRejected(Collection $results)
     {
-        return function ($reason, $identifier) use (&$results) {
-            if ($reason instanceof ClientException) {
-                return $results->put($identifier, $this->getBody($reason->getResponse()));
-            }
-
-            $this->logger->error($reason);
+        return function ($reason, $identifier) use ($results) {
+            $this->logger->error($reason->getMessage(), [
+                'zone' => $identifier,
+                'exception' => $reason,
+            ]);
 
             return $results->put($identifier, $this->handleException($reason));
         };
     }
 
     /**
-     * Transform a request exception into a response object.
+     * Transform a request exception into a result object.
      *
      * @param  \GuzzleHttp\Exception\RequestException $e
      * @return object
      */
     protected function handleException(RequestException $e)
     {
+        if ($e instanceof ClientException) {
+            return $this->getBody($e->getResponse());
+        }
+
         if ($e->hasResponse()) {
             $message = (string) $e->getResponse()->getBody();
         } else {
             $message = $e->getMessage();
         }
 
-        $response = [
+        $result = [
             'success' => false,
             'errors' => [
                 (object) [
@@ -139,11 +142,11 @@ class Client
             ],
         ];
 
-        return (object) $response;
+        return (object) $result;
     }
 
     /**
-     * Get the response body.
+     * Transform the response body into a result object.
      *
      * @param  \GuzzleHttp\Psr7\Response $response
      * @return object
@@ -156,7 +159,7 @@ class Client
     /**
      * Get the Guzzle client.
      *
-     * @return \GuzzleHttp\Client
+     * @return \GuzzleHttp\ClientInterface
      */
     public function getClient()
     {
