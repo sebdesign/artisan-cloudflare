@@ -3,10 +3,10 @@
 namespace Sebdesign\ArtisanCloudflare;
 
 use GuzzleHttp\Promise;
+use Psr\Log\LoggerInterface;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Support\Collection;
-use Illuminate\Contracts\Logging\Log;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 
@@ -23,17 +23,17 @@ class Client
     protected $client;
 
     /**
-     * @var \Illuminate\Contracts\Logging\Log
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
     /**
      * Constructor.
      *
-     * @param \GuzzleHttp\ClientInterface    $client
-     * @param \Illuminate\Contracts\Logging  $logger
+     * @param \GuzzleHttp\ClientInterface $client
+     * @param \Psr\Log\LoggerInterface    $logger
      */
-    public function __construct(ClientInterface $client, Log $logger)
+    public function __construct(ClientInterface $client, LoggerInterface $logger)
     {
         $this->client = $client;
         $this->logger = $logger;
