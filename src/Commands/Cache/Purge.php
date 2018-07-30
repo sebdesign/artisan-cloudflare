@@ -95,8 +95,8 @@ class Purge extends Command
      *
      * Use the config for each zone, unless options are passed in the command.
      *
-     * @param  \Illuminate\Support\Collection<string, \Symfony\Component\HttpFoundation\ParameterBag> $zones
-     * @return \Illuminate\Support\Collection<string, \Symfony\Component\HttpFoundation\ParameterBag>
+     * @param  \Illuminate\Support\Collection|\Symfony\Component\HttpFoundation\ParameterBag[] $zones
+     * @return \Illuminate\Support\Collection|\Symfony\Component\HttpFoundation\ParameterBag[]
      */
     private function applyParameters(Collection $zones)
     {
@@ -118,8 +118,8 @@ class Purge extends Command
     /**
      * Execute the purging operations and return each result.
      *
-     * @param  \Illuminate\Support\Collection<string, \Symfony\Component\HttpFoundation\ParameterBag> $zones
-     * @return \Illuminate\Support\Collection<string, object>
+     * @param  \Illuminate\Support\Collection|\Symfony\Component\HttpFoundation\ParameterBag[] $zones
+     * @return \Illuminate\Support\Collection|object[]
      */
     private function purge(Collection $zones)
     {
@@ -139,8 +139,8 @@ class Purge extends Command
     /**
      * Display a table with the results.
      *
-     * @param  \Illuminate\Support\Collection<string, \Symfony\Component\HttpFoundation\ParameterBag> $zones
-     * @param  \Illuminate\Support\Collection<string, object> $results
+     * @param  \Illuminate\Support\Collection|\Symfony\Component\HttpFoundation\ParameterBag[] $zones
+     * @param  \Illuminate\Support\Collection|object[] $results
      * @return void
      */
     private function displayResults(Collection $zones, Collection $results)
@@ -229,7 +229,7 @@ class Purge extends Command
     /**
      * Get the zone identifier from the input argument or the configuration.
      *
-     * @return \Illuminate\Support\Collection<string, \Symfony\Component\HttpFoundation\ParameterBag>
+     * @return \Illuminate\Support\Collection|\Symfony\Component\HttpFoundation\ParameterBag[]
      */
     private function getZones()
     {

@@ -5,8 +5,8 @@ namespace Sebdesign\ArtisanCloudflare;
 use GuzzleHttp\Promise;
 use Psr\Log\LoggerInterface;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\ClientInterface;
 use Illuminate\Support\Collection;
+use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 
@@ -18,7 +18,7 @@ class Client
     const BASE_URI = 'https://api.cloudflare.com/client/v4/';
 
     /**
-     * @var \GuzzleHttp\ClientInterface
+     * @var \GuzzleHttp\Client
      */
     protected $client;
 
@@ -30,10 +30,10 @@ class Client
     /**
      * Constructor.
      *
-     * @param \GuzzleHttp\ClientInterface $client
-     * @param \Psr\Log\LoggerInterface    $logger
+     * @param \GuzzleHttp\Client       $client
+     * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(ClientInterface $client, LoggerInterface $logger)
+    public function __construct(GuzzleClient $client, LoggerInterface $logger)
     {
         $this->client = $client;
         $this->logger = $logger;
@@ -47,8 +47,8 @@ class Client
      * The promise waits until all the promises have been resolved or rejected
      * and returns the results of each request.
      *
-     * @param  \Illuminate\Support\Collection<string, array>  $parameters
-     * @return \Illuminate\Support\Collection<string, object>
+     * @param  \Illuminate\Support\Collection|array[]  $parameters
+     * @return \Illuminate\Support\Collection|object[]
      */
     public function purge(Collection $parameters)
     {
@@ -67,7 +67,7 @@ class Client
      *
      * The returned promise is fulfilled with a collection of results.
      *
-     * @param  \Illuminate\Support\Collection<string, \GuzzleHttp\Promise\PromiseInterface> $promises
+     * @param  \Illuminate\Support\Collection|\GuzzleHttp\Promise\PromiseInterface[] $promises
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     protected function settle(Collection $promises)
@@ -86,7 +86,7 @@ class Client
     /**
      * Put the body of the fulfilled promise into the results.
      *
-     * @param  \Illuminate\Support\Collection<string, object> $results
+     * @param  \Illuminate\Support\Collection|object[] $results
      * @return \Closure
      */
     protected function onFulfilled(Collection $results)
@@ -99,7 +99,7 @@ class Client
     /**
      * Handle the rejected promise and put the errors into the results.
      *
-     * @param  \Illuminate\Support\Collection<string, object> $results
+     * @param  \Illuminate\Support\Collection|object[] $results
      * @return \Closure
      */
     protected function onRejected(Collection $results)

@@ -112,7 +112,7 @@ trait ConsoleHelpers
     /**
      * Dump the output from the last command.
      *
-     * @return void
+     * @return $this
      */
     protected function dumpConsole()
     {
