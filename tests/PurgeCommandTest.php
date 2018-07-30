@@ -78,7 +78,6 @@ class PurgeCommandTest extends TestCase
         ]]);
 
         $this->mockClientErrorResponse([[
-            'code' => 43,
             'message' => 'Another error message',
         ]]);
 
@@ -94,7 +93,6 @@ class PurgeCommandTest extends TestCase
             ->seeInConsole('42')
             ->seeInConsole('Error message')
             ->seeInConsole('another-identifier')
-            ->seeInConsole('43')
             ->seeInConsole('Another error message')
             ->withoutSuccessCode();
     }

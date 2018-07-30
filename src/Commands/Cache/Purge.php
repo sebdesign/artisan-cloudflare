@@ -218,7 +218,7 @@ class Purge extends Command
     private function formatErrors(array $errors)
     {
         return array_map(function ($error) {
-            if ($error->code) {
+            if (isset($error->code)) {
                 return "<fg=red>{$error->code}: {$error->message}</>";
             }
 

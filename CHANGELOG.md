@@ -2,6 +2,10 @@
 
 All notable changes to `artisan-cloudflare` will be documented in this file.
 
+## 1.2.1 - 2018-07-31
+
+- Check if the error code is set and not null
+
 ## 1.2.0 - 2018-02-17
 
 - Add support for Laravel 5.6
