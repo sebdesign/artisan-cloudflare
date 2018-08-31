@@ -19,7 +19,7 @@ You can install the package via composer. This package requires Laravel 5.1 or h
 composer require sebdesign/artisan-cloudflare
 ```
 
-Sinve version 5.5, Laravel uses package auto-discovery, so doesn't require you to manually add the ServiceProvider. If you don't use auto-discovery or you are using an older version, add the service provider in `config/app.php`.
+Since version 5.5, Laravel uses package auto-discovery, so doesn't require you to manually add the ServiceProvider. If you don't use auto-discovery or you are using an older version, add the service provider in `config/app.php`.
 
 ``` php
 <?php
@@ -132,12 +132,12 @@ php artisan cloudflare:cache:purge 023e105f4ecef8ad9ca31a8372d0c353 --file="http
 
 ## Changelog
 
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
 ## Testing
 
 ``` bash
-$ composer test
+composer test
 ```
 
 ## Contributing
