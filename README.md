@@ -9,7 +9,7 @@
 
 Laravel artisan commands for interacting with the CloudFlare API.
 
-![artisan-cloudflare.png](https://s13.postimg.org/6cukzjf53/artisan_cloudflare.png)
+![artisan-cloudflare.png](https://s13.postimg.cc/6cukzjf53/artisan-cloudflare.png)
 
 ## Installation
 
