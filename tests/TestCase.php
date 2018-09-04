@@ -50,6 +50,10 @@ abstract class TestCase extends BaseTestCase
      */
     protected function registerServiceProvider()
     {
-        $this->app->register(new ServiceProvider($this->app), [], true);
+        if (version_compare($this->app->version(), '5.7.0', '>=')) {
+            $this->app->register(new ServiceProvider($this->app), true);
+        } else {
+            $this->app->register(new ServiceProvider($this->app), [], true);
+        }
     }
 }
