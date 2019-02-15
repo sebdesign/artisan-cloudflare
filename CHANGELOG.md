@@ -2,6 +2,10 @@
 
 All notable changes to `artisan-cloudflare` will be documented in this file.
 
+## 1.3.0 - 2019-02-15
+
+- Add support for Laravel 5.8
+
 ## 1.2.3 - 2018-09-04
 
 - Fix `register` method call in Laravel 5.7
