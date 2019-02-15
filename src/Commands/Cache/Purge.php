@@ -45,7 +45,7 @@ class Purge extends Command
     /**
      * API item identifier tags.
      *
-     * @var \Illuminate\Support\Collection<string, \Symfony\Component\HttpFoundation\ParameterBag>
+     * @var \Illuminate\Support\Collection<string,\Symfony\Component\HttpFoundation\ParameterBag>
      */
     private $zones;
 
@@ -119,7 +119,7 @@ class Purge extends Command
      * Execute the purging operations and return each result.
      *
      * @param  \Illuminate\Support\Collection|\Symfony\Component\HttpFoundation\ParameterBag[] $zones
-     * @return \Illuminate\Support\Collection|object[]
+     * @return \Illuminate\Support\Collection|\stdClass[]
      */
     private function purge(Collection $zones)
     {
@@ -140,7 +140,7 @@ class Purge extends Command
      * Display a table with the results.
      *
      * @param  \Illuminate\Support\Collection|\Symfony\Component\HttpFoundation\ParameterBag[] $zones
-     * @param  \Illuminate\Support\Collection|object[] $results
+     * @param  \Illuminate\Support\Collection|\stdClass[] $results
      * @return void
      */
     private function displayResults(Collection $zones, Collection $results)
@@ -212,7 +212,7 @@ class Purge extends Command
     /**
      * Format the errors.
      *
-     * @param  object[] $errors
+     * @param  \stdClass[] $errors
      * @return string[]
      */
     private function formatErrors(array $errors)

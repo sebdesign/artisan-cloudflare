@@ -4,9 +4,9 @@ namespace Sebdesign\ArtisanCloudflare;
 
 use GuzzleHttp\Promise;
 use Psr\Log\LoggerInterface;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
 use GuzzleHttp\Client as GuzzleClient;
+use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 
@@ -48,7 +48,7 @@ class Client
      * and returns the results of each request.
      *
      * @param  \Illuminate\Support\Collection|array[]  $parameters
-     * @return \Illuminate\Support\Collection|object[]
+     * @return \Illuminate\Support\Collection|\stdClass[]
      */
     public function purge(Collection $parameters)
     {
@@ -118,16 +118,19 @@ class Client
      * Transform a request exception into a result object.
      *
      * @param  \GuzzleHttp\Exception\RequestException $e
-     * @return object
+     * @return \stdClass
      */
     protected function handleException(RequestException $e)
     {
-        if ($e instanceof ClientException) {
-            return $this->getBody($e->getResponse());
-        }
-
         if ($e->hasResponse()) {
-            $message = (string) $e->getResponse()->getBody();
+            /** @var \Psr\Http\Message\ResponseInterface $response */
+            $response = $e->getResponse();
+
+            if ($e instanceof ClientException) {
+                return $this->getBody($response);
+            }
+
+            $message = (string) $response->getBody();
         } else {
             $message = $e->getMessage();
         }
@@ -148,10 +151,10 @@ class Client
     /**
      * Transform the response body into a result object.
      *
-     * @param  \GuzzleHttp\Psr7\Response $response
-     * @return object
+     * @param  \Psr\Http\Message\ResponseInterface $response
+     * @return \stdClass
      */
-    protected function getBody(Response $response)
+    protected function getBody(ResponseInterface $response)
     {
         return json_decode($response->getBody(), false);
     }
