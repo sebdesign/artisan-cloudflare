@@ -2,7 +2,9 @@
 
 namespace Sebdesign\ArtisanCloudflare\Test;
 
+use Illuminate\Support\Collection;
 use Sebdesign\ArtisanCloudflare\Client;
+use Sebdesign\ArtisanCloudflare\Zone;
 
 class ClientTest extends TestCase
 {
@@ -13,7 +15,7 @@ class ClientTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -32,7 +34,9 @@ class ClientTest extends TestCase
 
         // Act
 
-        $results = $client->purge(collect(['foo' => ['bar' => 'baz']]));
+        $results = $client->purge(Collection::make([
+            'foo' => new Zone(['bar' => 'baz']),
+        ]));
 
         // Assert
 
@@ -40,7 +44,7 @@ class ClientTest extends TestCase
         $this->assertCount(1, $results);
         $this->seeRequestWithBody($this->transactions->first(), ['bar' => 'baz']);
         $this->seeRequestContainsPath($this->transactions->first(), 'foo');
-        $this->assertEquals((object) ['success' => true], $results->get('foo'));
+        $this->assertEquals(new Zone(['success' => true]), $results->get('foo'));
     }
 
     /**
@@ -55,7 +59,9 @@ class ClientTest extends TestCase
 
         // Act
 
-        $results = $client->purge(collect(['foo' => ['bar' => 'baz']]));
+        $results = $client->purge(Collection::make([
+            'foo' => new Zone(['bar' => 'baz']),
+        ]));
 
         // Assert
 
@@ -63,10 +69,10 @@ class ClientTest extends TestCase
         $this->assertCount(1, $results);
         $this->seeRequestWithBody($this->transactions->first(), ['bar' => 'baz']);
         $this->seeRequestContainsPath($this->transactions->first(), 'foo');
-        $this->assertEquals((object) [
+        $this->assertEquals(new Zone([
             'success' => false,
             'errors' => ['error'],
-        ], $results->get('foo'));
+        ]), $results->get('foo'));
     }
 
     /**
@@ -82,9 +88,9 @@ class ClientTest extends TestCase
 
         // Act
 
-        $results = $client->purge(collect([
-            'foo' => ['bar' => 'baz'],
-            'bar' => ['baz' => 'qux'],
+        $results = $client->purge(Collection::make([
+            'foo' => new Zone(['bar' => 'baz']),
+            'bar' => new Zone(['baz' => 'qux']),
         ]));
 
         // Assert
@@ -93,26 +99,26 @@ class ClientTest extends TestCase
         $this->assertCount(2, $results);
         $this->seeRequestWithBody($this->transactions->get(0), ['bar' => 'baz']);
         $this->seeRequestContainsPath($this->transactions->get(0), 'foo');
-        $this->assertEquals((object) [
+        $this->assertEquals(new Zone([
             'success' => false,
             'errors' => [
-                (object) [
+                [
                     'code' => 0,
                     'message' => 'Connection error',
                 ],
             ],
-        ], $results->get('foo'));
+        ]), $results->get('foo'));
 
         $this->seeRequestWithBody($this->transactions->get(1), ['baz' => 'qux']);
         $this->seeRequestContainsPath($this->transactions->get(1), 'bar');
-        $this->assertEquals((object) [
+        $this->assertEquals(new Zone([
             'success' => false,
             'errors' => [
-                (object) [
+                [
                     'code' => 500,
                     'message' => 'Fatal error',
                 ],
             ],
-        ], $results->get('bar'));
+        ]), $results->get('bar'));
     }
 }

@@ -2,14 +2,15 @@
 
 namespace Sebdesign\ArtisanCloudflare\Test;
 
-use GuzzleHttp\Middleware;
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\Client as GuzzleClient;
+use Illuminate\Support\Collection;
 use Sebdesign\ArtisanCloudflare\Client;
-use GuzzleHttp\Exception\RequestException;
 
 trait GuzzleHelpers
 {
@@ -34,7 +35,7 @@ trait GuzzleHelpers
      */
     protected function seeRequestContainsPath(array $transaction, $path)
     {
-        $this->assertContains($path, $transaction['request']->getUri()->getPath());
+        $this->assertStringContainsString($path, $transaction['request']->getUri()->getPath());
 
         return $this;
     }
@@ -65,7 +66,7 @@ trait GuzzleHelpers
         $stack = HandlerStack::create($this->handler);
 
         // Attach the transaction history to the handler stack.
-        $this->transactions = collect();
+        $this->transactions = Collection::make();
         $stack->push(Middleware::history($this->transactions));
 
         // Initialize the mocked guzzle client

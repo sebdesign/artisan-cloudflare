@@ -2,9 +2,11 @@
 
 namespace Sebdesign\ArtisanCloudflare\Test;
 
+use Illuminate\Support\Collection;
+
 class CollectionTest extends TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -37,17 +39,17 @@ class CollectionTest extends TestCase
         ];
 
         $expected = [
-            collect([
+            Collection::make([
                 'identifiers' => 'zone-a',
                 'files' => ['app.css', 'app.js'],
                 'tags' => ['styles', 'scripts'],
             ]),
-            collect([
+            Collection::make([
                 'identifiers' => 'zone-b',
                 'files' => ['main.css', 'main.js'],
                 'tags' => ['images', 'icons'],
             ]),
-            collect([
+            Collection::make([
                 'identifiers' => 'zone-c',
                 'files' => ['style.css', 'scripts.css'],
                 'tags' => ['fonts', 'media'],
@@ -56,11 +58,11 @@ class CollectionTest extends TestCase
 
         // Act
 
-        $actual = collect($zones)->_transpose();
+        $actual = Collection::make($zones)->_transpose();
 
         // Assert
 
-        $this->assertEquals(collect($expected), $actual);
+        $this->assertEquals(Collection::make($expected), $actual);
     }
 
     /**
@@ -86,11 +88,11 @@ class CollectionTest extends TestCase
 
         // Act
 
-        $actual = collect($table)->insertBetween('-----');
+        $actual = Collection::make($table)->insertBetween('-----');
 
         // Assert
 
-        $this->assertEquals(collect($expected), $actual);
+        $this->assertEquals(Collection::make($expected), $actual);
     }
 
     /**
@@ -116,10 +118,10 @@ class CollectionTest extends TestCase
 
         // Act
 
-        $actual = collect($items)->reorder($keys);
+        $actual = Collection::make($items)->reorder($keys);
 
         // Assert
 
-        $this->assertEquals(collect($expected), $actual);
+        $this->assertEquals(Collection::make($expected), $actual);
     }
 }

@@ -43,7 +43,7 @@ trait ConsoleHelpers
      */
     protected function seeInConsole($text)
     {
-        $this->assertContains($text, $this->output);
+        $this->assertStringContainsString($text, $this->output);
 
         return $this;
     }
@@ -56,7 +56,7 @@ trait ConsoleHelpers
      */
     protected function dontSeeInConsole($text)
     {
-        $this->assertNotContains($text, $this->output);
+        $this->assertStringNotContainsString($text, $this->output);
 
         return $this;
     }

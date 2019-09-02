@@ -20,9 +20,11 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     public function boot()
     {
-        $this->publishes([
-            __DIR__.'/../config/cloudflare.php' => config_path('cloudflare.php'),
-        ], 'config');
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__.'/../config/cloudflare.php' => config_path('cloudflare.php'),
+            ], 'config');
+        }
     }
 
     public function register()
@@ -61,7 +63,6 @@ class ServiceProvider extends IlluminateServiceProvider
     {
         $this->app->bind(Commands\Cache\Purge::class, function () {
             return new Commands\Cache\Purge(
-                $this->app[Client::class],
                 $this->app['config']['cloudflare.zones']
             );
         });

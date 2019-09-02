@@ -5,8 +5,8 @@ namespace Sebdesign\ArtisanCloudflare\Commands\Cache;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Sebdesign\ArtisanCloudflare\Client;
+use Sebdesign\ArtisanCloudflare\Zone;
 use Symfony\Component\Console\Helper\TableCell;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\Console\Helper\TableSeparator;
 
 class Purge extends Command
@@ -45,34 +45,34 @@ class Purge extends Command
     /**
      * API item identifier tags.
      *
-     * @var \Illuminate\Support\Collection<string,\Symfony\Component\HttpFoundation\ParameterBag>
+     * @var \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
      */
     private $zones;
 
     /**
      * Purge constructor.
      *
-     * @param \Sebdesign\ArtisanCloudflare\Client $client
-     * @param array                               $zones
+     * @param array $zones
      */
-    public function __construct(Client $client, array $zones)
+    public function __construct(array $zones)
     {
         parent::__construct();
 
-        $this->client = $client;
-
-        $this->zones = collect($zones)->map(function ($zone) {
-            return new ParameterBag(array_filter($zone));
+        $this->zones = Collection::make($zones)->map(function (array $zone) {
+            return new Zone(array_filter($zone));
         });
     }
 
     /**
      * Execute the console command.
      *
+     * @param \Sebdesign\ArtisanCloudflare\Client $client
      * @return int
      */
-    public function handle()
+    public function handle(Client $client)
     {
+        $this->client = $client;
+
         $zones = $this->getZones();
 
         if ($zones->isEmpty()) {
@@ -95,10 +95,10 @@ class Purge extends Command
      *
      * Use the config for each zone, unless options are passed in the command.
      *
-     * @param  \Illuminate\Support\Collection|\Symfony\Component\HttpFoundation\ParameterBag[] $zones
-     * @return \Illuminate\Support\Collection|\Symfony\Component\HttpFoundation\ParameterBag[]
+     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone> $zones
+     * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
      */
-    private function applyParameters(Collection $zones)
+    private function applyParameters($zones)
     {
         $defaults = array_filter([
             'files' => $this->option('file'),
@@ -110,7 +110,7 @@ class Purge extends Command
             return $zones;
         }
 
-        return $zones->each(function ($zone) use ($defaults) {
+        return $zones->each(function (Zone $zone) use ($defaults) {
             $zone->replace($defaults);
         });
     }
@@ -118,20 +118,12 @@ class Purge extends Command
     /**
      * Execute the purging operations and return each result.
      *
-     * @param  \Illuminate\Support\Collection|\Symfony\Component\HttpFoundation\ParameterBag[] $zones
-     * @return \Illuminate\Support\Collection|\stdClass[]
+     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone> $zones
+     * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
      */
-    private function purge(Collection $zones)
+    private function purge($zones)
     {
-        $parameters = $zones->map(function ($zone) {
-            if ($zone->count()) {
-                return $zone->all();
-            }
-
-            return ['purge_everything' => true];
-        });
-
-        $results = $this->client->purge($parameters);
+        $results = $this->client->purge($zones);
 
         return $results->reorder($zones->keys());
     }
@@ -139,11 +131,11 @@ class Purge extends Command
     /**
      * Display a table with the results.
      *
-     * @param  \Illuminate\Support\Collection|\Symfony\Component\HttpFoundation\ParameterBag[] $zones
-     * @param  \Illuminate\Support\Collection|\stdClass[] $results
+     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone> $zones
+     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone> $results
      * @return void
      */
-    private function displayResults(Collection $zones, Collection $results)
+    private function displayResults($zones, $results)
     {
         $headers = ['Status', 'Zone', 'Files', 'Tags', 'Hosts', 'Errors'];
 
@@ -155,36 +147,36 @@ class Purge extends Command
         ];
 
         // Get the status emoji
-        $emoji = $results->pluck('success')->map(function ($success) {
-            return $success ? '✅' : '❌';
+        $emoji = $results->map(function (Zone $zone) {
+            return $zone->get('success') ? '✅' : '❌';
         });
 
         // Get the zone identifiers
         $identifiers = $zones->keys();
 
         // Get the files as multiline strings
-        $files = $zones->map(function ($zones) {
-            return $this->formatItems($zones->get('files'));
+        $files = $zones->map(function (Zone $zone) {
+            return $this->formatItems($zone->get('files', []));
         });
 
         // Get the tags as multiline strings
-        $tags = $zones->map(function ($zones) {
-            return $this->formatItems($zones->get('tags'));
+        $tags = $zones->map(function (Zone $zone) {
+            return $this->formatItems($zone->get('tags', []));
         });
 
         // Get the hosts as multiline strings
-        $hosts = $zones->map(function ($zones) {
-            return $this->formatItems($zones->get('hosts'));
+        $hosts = $zones->map(function (Zone $zone) {
+            return $this->formatItems($zone->get('hosts', []));
         });
 
         // Get the errors as red multiline strings
-        $errors = $results->map(function ($result) {
-            return $this->formatErrors($result->errors);
-        })->map(function ($errors) {
+        $errors = $results->map(function (Zone $result) {
+            return $this->formatErrors($result->get('errors', []));
+        })->map(function (array $errors) {
             return $this->formatItems($errors);
         });
 
-        $columns = collect([
+        $columns = Collection::make([
             'status' => $emoji,
             'identifier' => $identifiers,
             'files' => $files,
@@ -201,35 +193,35 @@ class Purge extends Command
     /**
      * Format an array into a multiline string.
      *
-     * @param  array|null  $items
+     * @param  array  $items
      * @return string
      */
-    private function formatItems(array $items = null)
+    private function formatItems(array $items)
     {
-        return implode("\n", (array) $items);
+        return implode("\n", $items);
     }
 
     /**
      * Format the errors.
      *
-     * @param  \stdClass[] $errors
+     * @param  array[] $errors
      * @return string[]
      */
     private function formatErrors(array $errors)
     {
-        return array_map(function ($error) {
-            if (isset($error->code)) {
-                return "<fg=red>{$error->code}: {$error->message}</>";
+        return array_map(function (array $error) {
+            if (isset($error['code'])) {
+                return "<fg=red>{$error['code']}: {$error['message']}</>";
             }
 
-            return "<fg=red>{$error->message}</>";
+            return "<fg=red>{$error['message']}</>";
         }, $errors);
     }
 
     /**
      * Get the zone identifier from the input argument or the configuration.
      *
-     * @return \Illuminate\Support\Collection|\Symfony\Component\HttpFoundation\ParameterBag[]
+     * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
      */
     private function getZones()
     {
@@ -243,19 +235,21 @@ class Purge extends Command
             return $zones;
         }
 
-        return collect([
-            $zone => new ParameterBag(),
+        return new Collection([
+            $zone => new Zone(),
         ]);
     }
 
     /**
      * Return 1 if all successes are false, otherwise return 0.
      *
-     * @param  \Illuminate\Support\Collection $results
+     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone> $results
      * @return int
      */
-    private function getExitCode(Collection $results)
+    private function getExitCode($results)
     {
-        return (int) $results->pluck('success')->filter()->isEmpty();
+        return (int) $results->filter(function (Zone $zone) {
+            return $zone->get('success');
+        })->isEmpty();
     }
 }

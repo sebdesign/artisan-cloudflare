@@ -47,18 +47,28 @@ class Client
      * The promise waits until all the promises have been resolved or rejected
      * and returns the results of each request.
      *
-     * @param  \Illuminate\Support\Collection|array[]  $parameters
-     * @return \Illuminate\Support\Collection|\stdClass[]
+     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
+     * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
      */
-    public function purge(Collection $parameters)
+    public function purge($zones)
     {
-        $promises = $parameters->map(function ($parameters, $identifier) {
-            return $this->client->deleteAsync("zones/{$identifier}/purge_cache", [
-                \GuzzleHttp\RequestOptions::JSON => $parameters,
-            ]);
-        });
+        return $zones->map(function (Zone $zone, $identifier) {
+            return $this->delete($identifier, $zone);
+        })->pipe(function ($promises) {
+            return $this->settle($promises);
+        })->wait();
+    }
 
-        return $this->settle($promises)->wait();
+    /**
+     * @param  string                             $identifier
+     * @param  \Sebdesign\ArtisanCloudflare\Zone  $zone
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    protected function delete($identifier, Zone $zone)
+    {
+        return $this->client->deleteAsync("zones/{$identifier}/purge_cache", [
+            \GuzzleHttp\RequestOptions::JSON => $zone,
+        ]);
     }
 
     /**
@@ -67,15 +77,15 @@ class Client
      *
      * The returned promise is fulfilled with a collection of results.
      *
-     * @param  \Illuminate\Support\Collection|\GuzzleHttp\Promise\PromiseInterface[] $promises
+     * @param  \Illuminate\Support\Collection<string,\GuzzleHttp\Promise\PromiseInterface> $promises
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     protected function settle(Collection $promises)
     {
-        $results = collect();
+        $results = new Collection();
 
         return Promise\each(
-            $promises->toArray(),
+            $promises->getIterator(),
             $this->onFulfilled($results),
             $this->onRejected($results)
         )->then(function () use ($results) {
@@ -86,11 +96,16 @@ class Client
     /**
      * Put the body of the fulfilled promise into the results.
      *
-     * @param  \Illuminate\Support\Collection|object[] $results
+     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone> $results
      * @return \Closure
      */
-    protected function onFulfilled(Collection $results)
+    protected function onFulfilled($results)
     {
+        /**
+         * @param  \Psr\Http\Message\ResponseInterface $response
+         * @param  string                              $identifier
+         * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
+         */
         return function ($response, $identifier) use ($results) {
             return $results->put($identifier, $this->getBody($response));
         };
@@ -99,11 +114,16 @@ class Client
     /**
      * Handle the rejected promise and put the errors into the results.
      *
-     * @param  \Illuminate\Support\Collection|object[] $results
+     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone> $results
      * @return \Closure
      */
-    protected function onRejected(Collection $results)
+    protected function onRejected($results)
     {
+        /**
+         * @param  \GuzzleHttp\Exception\RequestException $reason
+         * @param  string                                 $identifier
+         * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
+         */
         return function ($reason, $identifier) use ($results) {
             $this->logger->error($reason->getMessage(), [
                 'zone' => $identifier,
@@ -118,7 +138,7 @@ class Client
      * Transform a request exception into a result object.
      *
      * @param  \GuzzleHttp\Exception\RequestException $e
-     * @return \stdClass
+     * @return \Sebdesign\ArtisanCloudflare\Zone
      */
     protected function handleException(RequestException $e)
     {
@@ -135,28 +155,26 @@ class Client
             $message = $e->getMessage();
         }
 
-        $result = [
+        return new Zone([
             'success' => false,
             'errors' => [
-                (object) [
+                [
                     'code' => $e->getCode(),
                     'message' => $message,
                 ],
             ],
-        ];
-
-        return (object) $result;
+        ]);
     }
 
     /**
      * Transform the response body into a result object.
      *
      * @param  \Psr\Http\Message\ResponseInterface $response
-     * @return \stdClass
+     * @return \Sebdesign\ArtisanCloudflare\Zone
      */
     protected function getBody(ResponseInterface $response)
     {
-        return json_decode($response->getBody(), false);
+        return new Zone(json_decode($response->getBody(), true));
     }
 
     /**
