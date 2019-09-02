@@ -13,7 +13,7 @@ Laravel artisan commands for interacting with the CloudFlare API.
 
 ## Installation
 
-You can install the package via composer. This package requires Laravel 5.1 or higher.
+You can install the package via composer. This package requires Laravel 5.5 or higher.
 
 ``` bash
 composer require sebdesign/artisan-cloudflare
