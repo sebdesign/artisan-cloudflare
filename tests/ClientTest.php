@@ -3,8 +3,8 @@
 namespace Sebdesign\ArtisanCloudflare\Test;
 
 use Illuminate\Support\Collection;
-use Sebdesign\ArtisanCloudflare\Client;
 use Sebdesign\ArtisanCloudflare\Zone;
+use Sebdesign\ArtisanCloudflare\Client;
 
 class ClientTest extends TestCase
 {

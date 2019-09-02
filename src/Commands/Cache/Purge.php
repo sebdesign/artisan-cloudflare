@@ -4,8 +4,8 @@ namespace Sebdesign\ArtisanCloudflare\Commands\Cache;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Sebdesign\ArtisanCloudflare\Client;
 use Sebdesign\ArtisanCloudflare\Zone;
+use Sebdesign\ArtisanCloudflare\Client;
 use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Helper\TableSeparator;
 

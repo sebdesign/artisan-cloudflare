@@ -101,7 +101,7 @@ class Client
      */
     protected function onFulfilled($results)
     {
-        /**
+        /*
          * @param  \Psr\Http\Message\ResponseInterface $response
          * @param  string                              $identifier
          * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
@@ -119,7 +119,7 @@ class Client
      */
     protected function onRejected($results)
     {
-        /**
+        /*
          * @param  \GuzzleHttp\Exception\RequestException $reason
          * @param  string                                 $identifier
          * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
