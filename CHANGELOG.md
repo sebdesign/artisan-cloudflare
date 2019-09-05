@@ -2,6 +2,10 @@
 
 All notable changes to `artisan-cloudflare` will be documented in this file.
 
+## 2.0.1 - 2019-09-05
+
+- Fix deference of the service provider for Laravel 6.0
+
 ## 2.0.0 - 2019-09-02
 
 - Add support for Laravel 6.0

@@ -9,13 +9,6 @@ use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 class ServiceProvider extends IlluminateServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = true;
-
-    /**
      * Bootstrap the application services.
      */
     public function boot()
@@ -116,6 +109,16 @@ class ServiceProvider extends IlluminateServiceProvider
                 return array_search($key, $order);
             });
         });
+    }
+
+    /**
+     * Determine if the provider is deferred.
+     *
+     * @return bool
+     */
+    public function isDeferred()
+    {
+        return true;
     }
 
     /**

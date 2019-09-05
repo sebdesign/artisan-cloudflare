@@ -57,7 +57,10 @@ class ServiceProviderTest extends TestCase
 
         // Assert
 
-        $this->assertTrue($provider->isDeferred());
+        $this->assertTrue(
+            $provider->isDeferred(),
+            'Failed asserting that the service provider is deferred.'
+        );
     }
 
     /**
