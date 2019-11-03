@@ -3,8 +3,8 @@
 namespace Sebdesign\ArtisanCloudflare\Test;
 
 use Sebdesign\ArtisanCloudflare\Client;
-use Sebdesign\ArtisanCloudflare\ServiceProvider;
 use Sebdesign\ArtisanCloudflare\Commands\Cache\Purge;
+use Sebdesign\ArtisanCloudflare\ServiceProvider;
 
 class ServiceProviderTest extends TestCase
 {
