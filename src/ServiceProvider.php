@@ -2,8 +2,8 @@
 
 namespace Sebdesign\ArtisanCloudflare;
 
-use Illuminate\Support\Collection;
 use GuzzleHttp\Client as GuzzleClient;
+use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
 class ServiceProvider extends IlluminateServiceProvider
@@ -44,7 +44,7 @@ class ServiceProvider extends IlluminateServiceProvider
         $config = $this->app['config']['cloudflare'];
 
         $authorization = isset($config['token']) ? [
-            'Authorization' => "Bearer {$config['token']}"
+            'Authorization' => "Bearer {$config['token']}",
         ] : [
             'X-Auth-Key' => $config['key'],
             'X-Auth-Email' => $config['email'],

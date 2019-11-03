@@ -2,8 +2,8 @@
 
 namespace Sebdesign\ArtisanCloudflare\Test;
 
-use Sebdesign\ArtisanCloudflare\ServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use Sebdesign\ArtisanCloudflare\ServiceProvider;
 
 abstract class TestCase extends BaseTestCase
 {

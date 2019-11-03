@@ -2,13 +2,13 @@
 
 namespace Sebdesign\ArtisanCloudflare;
 
-use GuzzleHttp\Promise;
-use Psr\Log\LoggerInterface;
-use Illuminate\Support\Collection;
 use GuzzleHttp\Client as GuzzleClient;
-use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise;
+use Illuminate\Support\Collection;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
 class Client
 {
