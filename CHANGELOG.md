@@ -2,6 +2,10 @@
 
 All notable changes to `artisan-cloudflare` will be documented in this file.
 
+## 2.1.0 - 2019-11-03
+
+- Add support for authentication with an API token
+
 ## 2.0.1 - 2019-09-05
 
 - Fix deference of the service provider for Laravel 6.0

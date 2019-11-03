@@ -81,11 +81,56 @@ class ServiceProviderTest extends TestCase
         $this->assertInstanceOf(Client::class, $client);
 
         $base_uri = $client->getClient()->getConfig('base_uri');
-        $headers = $client->getClient()->getConfig('headers');
 
         $this->assertEquals(Client::BASE_URI, $base_uri);
-        $this->assertEquals($this->app['config']['cloudflare.key'], $headers['X-Auth-Key']);
-        $this->assertEquals($this->app['config']['cloudflare.email'], $headers['X-Auth-Email']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_authenticates_with_an_api_token()
+    {
+        // Arrange
+
+        $this->app['config']->set(['cloudflare.token' => 'API_TOKEN']);
+
+        $this->registerServiceProvider();
+
+        // Act
+
+        $client = $this->app[Client::class];
+
+        // Assert
+
+        $headers = $client->getClient()->getConfig('headers');
+
+        $this->assertEquals('Bearer API_KEY', $headers['Authorization']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_authenticates_with_an_api_key()
+    {
+        // Arrange
+
+        $this->app['config']->set([
+            'cloudflare.key' => 'API_KEY',
+            'cloudflare.enauk' => 'email@example.com',
+        ]);
+
+        $this->registerServiceProvider();
+
+        // Act
+
+        $client = $this->app[Client::class];
+
+        // Assert
+
+        $headers = $client->getClient()->getConfig('headers');
+
+        $this->assertEquals('API_KEY', $headers['X-Auth-Key']);
+        $this->assertEquals('email@example.com', $headers['X-Auth-Email']);
     }
 
     /**

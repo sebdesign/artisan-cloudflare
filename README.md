@@ -31,7 +31,11 @@ Since version 5.5, Laravel uses package auto-discovery, so doesn't require you t
 
 ## Configuration
 
-Publish the config file in `config/cloudflare.php` and set your `CLOUDFLARE_KEY` and `CLOUDFLARE_EMAIL` in the `.env`.
+Publish the config file in `config/cloudflare.php`.
+
+To authenticate with an API key set `CLOUDFLARE_KEY` and `CLOUDFLARE_EMAIL` in the `.env`.
+
+Otherwise you can use an API token by setting the `CLOUDFLARE_TOKEN` in the `.env`.
 
 ``` bash
 php artisan vendor:publish --provider="Sebdesign\ArtisanCloudflare\ServiceProvider"
@@ -43,6 +47,11 @@ The following options are available:
 <?php
 
 return [
+
+    /*
+     * API token generated from the User Profile 'API Tokens' page.
+     */
+    'token' => env('CLOUDFLARE_TOKEN'),
 
     /**
      * API key generated on the "My Account" page.

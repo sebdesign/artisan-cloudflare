@@ -3,6 +3,11 @@
 return [
 
     /*
+     * API token generated from the User Profile 'API Tokens' page.
+     */
+    'token' => env('CLOUDFLARE_TOKEN'),
+
+    /*
      * API key generated on the "My Account" page.
      */
     'key' => env('CLOUDFLARE_KEY'),

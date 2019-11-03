@@ -43,12 +43,16 @@ class ServiceProvider extends IlluminateServiceProvider
     {
         $config = $this->app['config']['cloudflare'];
 
+        $authorization = isset($config['token']) ? [
+            'Authorization' => "Bearer {$config['token']}"
+        ] : [
+            'X-Auth-Key' => $config['key'],
+            'X-Auth-Email' => $config['email'],
+        ];
+
         return new GuzzleClient([
             'base_uri' => Client::BASE_URI,
-            \GuzzleHttp\RequestOptions::HEADERS => [
-                'X-Auth-Key' => $config['key'],
-                'X-Auth-Email' => $config['email'],
-            ],
+            \GuzzleHttp\RequestOptions::HEADERS => $authorization,
         ]);
     }
 
