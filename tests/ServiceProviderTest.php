@@ -104,7 +104,7 @@ class ServiceProviderTest extends TestCase
 
         $headers = $client->getClient()->getConfig('headers');
 
-        $this->assertEquals('Bearer API_KEY', $headers['Authorization']);
+        $this->assertEquals('Bearer API_TOKEN', $headers['Authorization']);
     }
 
     /**
