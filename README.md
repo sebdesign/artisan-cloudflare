@@ -48,7 +48,7 @@ The following options are available:
 
 return [
 
-    /*
+    /**
      * API token generated from the User Profile 'API Tokens' page.
      */
     'token' => env('CLOUDFLARE_TOKEN'),

@@ -1,17 +1,63 @@
 language: php
 
-php:
-  - 7.1
-  - 7.2
-  - 7.3
+cache:
+  directories:
+    - $HOME/.composer/cache
 
-env:
-  matrix:
-    - COMPOSER_FLAGS=""
+matrix:
+  fast_finish: true
+  include:
+  # Laravel 5.5
+  - php: 7.1
+    env: LARAVEL=5.5.* TESTBENCH=3.5.* PHPUNIT=~6.0
+  - php: 7.2
+    env: LARAVEL=5.5.* TESTBENCH=3.5.* PHPUNIT=~6.0
 
-before_script:
-  - travis_retry composer self-update
-  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
+  # Laravel 5.6
+  - php: 7.1
+    env: LARAVEL=5.6.* TESTBENCH=3.6.* PHPUNIT=~7.0
+  - php: 7.2
+    env: LARAVEL=5.6.* TESTBENCH=3.6.* PHPUNIT=~7.0
+
+  # Laravel 5.7
+  - php: 7.1
+    env: LARAVEL=5.7.* TESTBENCH=3.7.* PHPUNIT=~7.5
+  - php: 7.2
+    env: LARAVEL=5.7.* TESTBENCH=3.7.* PHPUNIT=~7.5
+  - php: 7.3
+    env: LARAVEL=5.7.* TESTBENCH=3.7.* PHPUNIT=~7.5
+
+# Laravel 5.8
+  - php: 7.1
+    env: LARAVEL=5.8.* TESTBENCH=3.8.* PHPUNIT=~7.5
+  - php: 7.2
+    env: LARAVEL=5.8.* TESTBENCH=3.8.* PHPUNIT=~8.0
+  - php: 7.3
+    env: LARAVEL=5.8.* TESTBENCH=3.8.* PHPUNIT=~8.0
+
+# Laravel 6.x
+  - php: 7.2
+    env: LARAVEL=^6.0 TESTBENCH=^4.0 PHPUNIT=~8.0
+  - php: 7.3
+    env: LARAVEL=^6.0 TESTBENCH=^4.0 PHPUNIT=~8.0
+  - php: 7.4
+    env: LARAVEL=^6.0 TESTBENCH=^4.0 PHPUNIT=~8.0
+
+# Laravel 7.x
+  - php: 7.2
+    env: LARAVEL=^7.0 TESTBENCH=^5.0 PHPUNIT=~8.5
+  - php: 7.3
+    env: LARAVEL=^7.0 TESTBENCH=^5.0 PHPUNIT=~8.5
+  - php: 7.4
+    env: LARAVEL=^7.0 TESTBENCH=^5.0 PHPUNIT=~8.5
+
+before_install:
+  - phpenv config-rm xdebug.ini
+  - composer self-update --stable --no-interaction
+  - composer require orchestra/testbench:$TESTBENCH phpunit/phpunit:$PHPUNIT --no-update --no-interaction --dev
+
+install:
+  - travis_retry composer install --no-suggest --no-interaction
 
 script:
   - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover

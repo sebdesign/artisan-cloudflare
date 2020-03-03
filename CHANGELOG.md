@@ -2,6 +2,10 @@
 
 All notable changes to `artisan-cloudflare` will be documented in this file.
 
+## 2.2.0 - 2020-03-03
+
+- Add support for Laravel 7
+
 ## 2.1.0 - 2019-11-03
 
 - Add support for authentication with an API token
