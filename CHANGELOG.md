@@ -2,6 +2,14 @@
 
 All notable changes to `artisan-cloudflare` will be documented in this file.
 
+## 2.3.0 - 2020-07-09
+
+- Add support for Guzzle 7
+
+## 2.2.1 - 2020-07-09
+
+- Better instructions for config
+
 ## 2.2.0 - 2020-03-03
 
 - Add support for Laravel 7
