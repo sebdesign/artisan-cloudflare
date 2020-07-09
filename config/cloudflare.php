@@ -3,12 +3,13 @@
 return [
 
     /*
-     * API token generated from the User Profile 'API Tokens' page.
+     * API token generated from the User Profile 'My Profile > Api Tokens > API Tokens' page.
+     * create token > Edit zone DNS > "Permissions" Zone:Cache Purge:Purge
      */
     'token' => env('CLOUDFLARE_TOKEN'),
 
     /*
-     * API key generated on the "My Account" page.
+     * Global API Key on the "My Profile > Api Tokens > API Keys" page.
      */
     'key' => env('CLOUDFLARE_KEY'),
 
@@ -22,7 +23,8 @@ return [
      *
      * Each zone must have its identifier as a key. The value is an
      * associated array with *optional* arrays of files and/or tags.
-     * If nothing is provided, then everything will be purged.
+     *
+     * you can find your zoneId under 'Account Home > site > Api'.
      *
      * E.g.
      *
