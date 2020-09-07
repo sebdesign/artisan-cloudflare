@@ -51,6 +51,12 @@ matrix:
   - php: 7.4
     env: LARAVEL=^7.0 TESTBENCH=^5.0 PHPUNIT=~8.5
 
+# Laravel 8.x
+  - php: 7.3
+    env: LARAVEL=^8.0 TESTBENCH=^6.0 PHPUNIT=~9.3
+  - php: 7.4
+    env: LARAVEL=^8.0 TESTBENCH=^6.0 PHPUNIT=~9.3
+
 before_install:
   - phpenv config-rm xdebug.ini
   - composer self-update --stable --no-interaction
