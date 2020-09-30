@@ -60,7 +60,7 @@ class ServiceProvider extends IlluminateServiceProvider
     {
         $this->app->bind(Commands\Cache\Purge::class, function () {
             return new Commands\Cache\Purge(
-                $this->app['config']['cloudflare.zones']
+                $this->app['config']['cloudflare.zones'] ?? []
             );
         });
 
