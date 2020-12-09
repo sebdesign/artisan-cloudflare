@@ -10,6 +10,7 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
+use PHPUnit\Framework\Constraint\StringContains;
 use Sebdesign\ArtisanCloudflare\Client;
 
 trait GuzzleHelpers
@@ -35,7 +36,9 @@ trait GuzzleHelpers
      */
     protected function seeRequestContainsPath(array $transaction, $path)
     {
-        $this->assertStringContainsString($path, $transaction['request']->getUri()->getPath());
+        $constraint = new StringContains($path, false);
+
+        $this->assertThat($transaction['request']->getUri()->getPath(), $constraint);
 
         return $this;
     }

@@ -1,0 +1,98 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        php: [8.0, 7.4, 7.3, 7.2, 7.1]
+        laravel: [^8.0, ^7.0, ^6.0, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
+        include:
+          - laravel: ^8.0
+            testbench: ^6.0
+            phpunit: 9.3
+          - laravel: ^7.0
+            testbench: ^5.0
+            phpunit: 8.5
+          - laravel: ^6.0
+            testbench: ^4.0
+            phpunit: 8.5
+          - laravel: 5.8.*
+            testbench: ^3.8
+            phpunit: 7.5
+          - laravel: 5.7.*
+            testbench: ^3.7
+            phpunit: 7.0
+          - laravel: 5.6.*
+            testbench: ^3.6
+            phpunit: 7.0
+          - laravel: 5.5.*
+            testbench: ^3.5
+            phpunit: 6.0
+        exclude:
+          - laravel: ^8.0
+            php: 7.2
+          - laravel: ^8.0
+            php: 7.1
+          - laravel: ^7.0
+            php: 7.1
+          - laravel: ^6.0
+            php: 7.1
+          - laravel: 5.8.*
+            php: 8.0
+          - laravel: 5.7.*
+            php: 8.0
+          - laravel: 5.7.*
+            php: 7.4
+          - laravel: 5.6.*
+            php: 8.0
+          - laravel: 5.6.*
+            php: 7.4
+          - laravel: 5.6.*
+            php: 7.3
+          - laravel: 5.5.*
+            php: 8.0
+          - laravel: 5.5.*
+            php: 7.4
+
+    name: P${{ matrix.php }} - L${{ matrix.laravel }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip
+          tools: composer:v2
+          coverage: pcov
+
+      - name: Install dependencies
+        run: |
+          composer require "illuminate/console:${{ matrix.laravel }}" "illuminate/support:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "phpunit/phpunit:^${{ matrix.phpunit }}" --no-interaction --no-update
+          composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Setup PCOV
+        if: ${{ matrix.phpunit < 8 }}
+        run: |
+          composer require pcov/clobber
+          vendor/bin/pcov clobber
+
+      - name: Execute tests
+        run: vendor/bin/phpunit --verbose --whitelist=src --coverage-clover=build/coverage/coverage.clover
+
+      - name: Upload coverage
+        if: ${{ matrix.php < 8 }}
+        run: |
+          wget https://scrutinizer-ci.com/ocular.phar
+          php ocular.phar code-coverage:upload --format=php-clover build/coverage/coverage.clover

@@ -3,6 +3,8 @@
 namespace Sebdesign\ArtisanCloudflare\Test;
 
 use Illuminate\Contracts\Console\Kernel;
+use PHPUnit\Framework\Constraint\LogicalNot;
+use PHPUnit\Framework\Constraint\StringContains;
 
 trait ConsoleHelpers
 {
@@ -43,7 +45,9 @@ trait ConsoleHelpers
      */
     protected function seeInConsole($text)
     {
-        $this->assertStringContainsString($text, $this->output);
+        $constraint = new StringContains($text, false);
+
+        $this->assertThat($this->output, $constraint);
 
         return $this;
     }
@@ -56,7 +60,9 @@ trait ConsoleHelpers
      */
     protected function dontSeeInConsole($text)
     {
-        $this->assertStringNotContainsString($text, $this->output);
+        $constraint = new LogicalNot(new StringContains($text));
+
+        static::assertThat($this->output, $constraint);
 
         return $this;
     }

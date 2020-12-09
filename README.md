@@ -2,9 +2,9 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/sebdesign/artisan-cloudflare.svg?style=flat-square)](https://packagist.org/packages/sebdesign/artisan-cloudflare)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/travis/sebdesign/artisan-cloudflare/master.svg?style=flat-square)](https://travis-ci.org/sebdesign/artisan-cloudflare)
+[![Build Status](https://img.shields.io/github/workflow/status/sebdesign/artisan-cloudflare/Tests/master?style=flat-square)](https://github.com/sebdesign/artisan-cloudflare/actions)
 [![Quality Score](https://img.shields.io/scrutinizer/g/sebdesign/artisan-cloudflare.svg?style=flat-square)](https://scrutinizer-ci.com/g/sebdesign/artisan-cloudflare)
-[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/sebdesign/artisan-cloudflare.svg?style=flat-square)]()
+[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/sebdesign/artisan-cloudflare.svg?style=flat-square)](https://scrutinizer-ci.com/g/sebdesign/artisan-cloudflare)
 [![StyleCI](https://styleci.io/repos/74228812/shield?style=flat-square)](https://styleci.io/repos/74228812)
 
 Laravel artisan commands for interacting with the CloudFlare API.
@@ -160,7 +160,7 @@ composer test
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
 
 ## Security
 

@@ -83,7 +83,7 @@ class ServiceProvider extends IlluminateServiceProvider
 
             $params = array_merge([function () use ($keys) {
                 return new static(array_combine($keys, func_get_args()));
-            }], $this->toArray());
+            }], $this->values()->toArray());
 
             return new static(call_user_func_array('array_map', $params));
         });
