@@ -2,6 +2,10 @@
 
 All notable changes to `artisan-cloudflare` will be documented in this file.
 
+## 2.4.4 - 2021-11-27
+
+- Add support for PHP 8.1
+
 ## 2.4.3 - 2020-12-09
 
 - Switch to GitHub Actions

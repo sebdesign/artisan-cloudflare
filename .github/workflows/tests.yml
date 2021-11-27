@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [8.0, 7.4, 7.3, 7.2, 7.1]
+        php: [8.1, 8.0, 7.4, 7.3, 7.2, 7.1]
         laravel: [^8.0, ^7.0, ^6.0, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
         include:
           - laravel: ^8.0
@@ -43,21 +43,31 @@ jobs:
           - laravel: ^8.0
             php: 7.1
           - laravel: ^7.0
+            php: 1.1
+          - laravel: ^7.0
             php: 7.1
           - laravel: ^6.0
             php: 7.1
           - laravel: 5.8.*
+            php: 8.1
+          - laravel: 5.8.*
             php: 8.0
+          - laravel: 5.7.*
+            php: 8.1
           - laravel: 5.7.*
             php: 8.0
           - laravel: 5.7.*
             php: 7.4
+          - laravel: 5.6.*
+            php: 8.1
           - laravel: 5.6.*
             php: 8.0
           - laravel: 5.6.*
             php: 7.4
           - laravel: 5.6.*
             php: 7.3
+          - laravel: 5.5.*
+            php: 8.1
           - laravel: 5.5.*
             php: 8.0
           - laravel: 5.5.*
@@ -89,10 +99,9 @@ jobs:
           vendor/bin/pcov clobber
 
       - name: Execute tests
-        run: vendor/bin/phpunit --verbose --whitelist=src --coverage-clover=build/coverage/coverage.clover
+        run: vendor/bin/phpunit --verbose --whitelist=src --coverage-clover=build/coverage/clover.xml
 
       - name: Upload coverage
-        if: ${{ matrix.php < 8 }}
-        run: |
-          wget https://scrutinizer-ci.com/ocular.phar
-          php ocular.phar code-coverage:upload --format=php-clover build/coverage/coverage.clover
+        uses: sudo-bot/action-scrutinizer@latest
+        with:
+          cli-args: "--format=php-clover build/coverage/clover.xml"
