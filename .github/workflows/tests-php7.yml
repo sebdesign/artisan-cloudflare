@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [8.1, 8.0, 7.4, 7.3, 7.2, 7.1]
+        php: [7.4, 7.3, 7.2, 7.1]
         laravel: [^8.0, ^7.0, ^6.0, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
         include:
           - laravel: ^8.0
@@ -22,7 +22,7 @@ jobs:
             phpunit: 8.5
           - laravel: ^6.0
             testbench: ^4.0
-            phpunit: 9.3
+            phpunit: 8.5
           - laravel: 5.8.*
             testbench: ^3.8
             phpunit: 7.5
@@ -41,35 +41,15 @@ jobs:
           - laravel: ^8.0
             php: 7.1
           - laravel: ^7.0
-            php: 8.1
-          - laravel: ^7.0
             php: 7.1
           - laravel: ^6.0
-            php: 8.1
-          - laravel: ^6.0
             php: 7.1
-          - laravel: 5.8.*
-            php: 8.1
-          - laravel: 5.8.*
-            php: 8.0
-          - laravel: 5.7.*
-            php: 8.1
-          - laravel: 5.7.*
-            php: 8.0
           - laravel: 5.7.*
             php: 7.4
-          - laravel: 5.6.*
-            php: 8.1
-          - laravel: 5.6.*
-            php: 8.0
           - laravel: 5.6.*
             php: 7.4
           - laravel: 5.6.*
             php: 7.3
-          - laravel: 5.5.*
-            php: 8.1
-          - laravel: 5.5.*
-            php: 8.0
           - laravel: 5.5.*
             php: 7.4
 
@@ -86,6 +66,23 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip
           tools: composer:v2
           coverage: pcov
+
+      - name: Setup problem matchers for PHP
+        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+
+      - name: Setup problem matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+            path: ${{ steps.composer-cache.outputs.dir }}
+            key: $p{{ matrix.php }}-l{{ matrix.laravel }}-composer-${{ hashFiles('**/composer.json') }}
+            restore-keys: $p{{ matrix.php }}-l{{ matrix.laravel }}-composer-
 
       - name: Install dependencies
         run: |
