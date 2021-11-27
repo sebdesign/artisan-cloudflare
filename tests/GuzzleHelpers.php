@@ -31,7 +31,7 @@ trait GuzzleHelpers
      * Assert the request URI contains the given path.
      *
      * @param  array  $transaction
-     * @param  string $path
+     * @param  string  $path
      * @return self
      */
     protected function seeRequestContainsPath(array $transaction, $path)

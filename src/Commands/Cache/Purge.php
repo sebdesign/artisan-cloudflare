@@ -52,7 +52,7 @@ class Purge extends Command
     /**
      * Purge constructor.
      *
-     * @param array $zones
+     * @param  array  $zones
      */
     public function __construct(array $zones)
     {
@@ -66,7 +66,7 @@ class Purge extends Command
     /**
      * Execute the console command.
      *
-     * @param \Sebdesign\ArtisanCloudflare\Client $client
+     * @param  \Sebdesign\ArtisanCloudflare\Client  $client
      * @return int
      */
     public function handle(Client $client)
@@ -95,7 +95,7 @@ class Purge extends Command
      *
      * Use the config for each zone, unless options are passed in the command.
      *
-     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone> $zones
+     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
      * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
      */
     private function applyParameters($zones)
@@ -118,7 +118,7 @@ class Purge extends Command
     /**
      * Execute the purging operations and return each result.
      *
-     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone> $zones
+     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
      * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
      */
     private function purge($zones)
@@ -131,8 +131,8 @@ class Purge extends Command
     /**
      * Display a table with the results.
      *
-     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone> $zones
-     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone> $results
+     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
+     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $results
      * @return void
      */
     private function displayResults($zones, $results)
@@ -204,7 +204,7 @@ class Purge extends Command
     /**
      * Format the errors.
      *
-     * @param  array[] $errors
+     * @param  array[]  $errors
      * @return string[]
      */
     private function formatErrors(array $errors)
@@ -243,7 +243,7 @@ class Purge extends Command
     /**
      * Return 1 if all successes are false, otherwise return 0.
      *
-     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone> $results
+     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $results
      * @return int
      */
     private function getExitCode($results)
