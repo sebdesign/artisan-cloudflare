@@ -30,8 +30,8 @@ class Client
     /**
      * Constructor.
      *
-     * @param \GuzzleHttp\Client       $client
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param  \GuzzleHttp\Client  $client
+     * @param  \Psr\Log\LoggerInterface  $logger
      */
     public function __construct(GuzzleClient $client, LoggerInterface $logger)
     {
@@ -60,7 +60,7 @@ class Client
     }
 
     /**
-     * @param  string                             $identifier
+     * @param  string  $identifier
      * @param  \Sebdesign\ArtisanCloudflare\Zone  $zone
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
@@ -77,7 +77,7 @@ class Client
      *
      * The returned promise is fulfilled with a collection of results.
      *
-     * @param  \Illuminate\Support\Collection<string,\GuzzleHttp\Promise\PromiseInterface> $promises
+     * @param  \Illuminate\Support\Collection<string,\GuzzleHttp\Promise\PromiseInterface>  $promises
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     protected function settle(Collection $promises)
@@ -96,7 +96,7 @@ class Client
     /**
      * Put the body of the fulfilled promise into the results.
      *
-     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone> $results
+     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $results
      * @return \Closure
      */
     protected function onFulfilled($results)
@@ -114,7 +114,7 @@ class Client
     /**
      * Handle the rejected promise and put the errors into the results.
      *
-     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone> $results
+     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $results
      * @return \Closure
      */
     protected function onRejected($results)
@@ -137,7 +137,7 @@ class Client
     /**
      * Transform a request exception into a result object.
      *
-     * @param  \GuzzleHttp\Exception\RequestException $e
+     * @param  \GuzzleHttp\Exception\RequestException  $e
      * @return \Sebdesign\ArtisanCloudflare\Zone
      */
     protected function handleException(RequestException $e)
@@ -169,7 +169,7 @@ class Client
     /**
      * Transform the response body into a result object.
      *
-     * @param  \Psr\Http\Message\ResponseInterface $response
+     * @param  \Psr\Http\Message\ResponseInterface  $response
      * @return \Sebdesign\ArtisanCloudflare\Zone
      */
     protected function getBody(ResponseInterface $response)
