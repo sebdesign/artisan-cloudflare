@@ -2,6 +2,10 @@
 
 All notable changes to `artisan-cloudflare` will be documented in this file.
 
+## 2.4.5 - 2022-02-26
+
+- Add support for Laravel 9 [#20](https://github.com/sebdesign/artisan-cloudflare/pull/20)
+
 ## 2.4.4 - 2021-11-27
 
 - Add support for PHP 8.1
