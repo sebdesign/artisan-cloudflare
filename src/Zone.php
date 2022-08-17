@@ -19,6 +19,7 @@ class Zone implements JsonSerializable
         $this->parameters = $parameters;
     }
 
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         if (empty($this->parameters)) {

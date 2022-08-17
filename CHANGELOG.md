@@ -2,6 +2,10 @@
 
 All notable changes to `artisan-cloudflare` will be documented in this file.
 
+## 2.4.6 - 2022-08-17
+
+- Add ReturnTypeWillChange attribute
+
 ## 2.4.5 - 2022-02-26
 
 - Add support for Laravel 9 [#20](https://github.com/sebdesign/artisan-cloudflare/pull/20)
