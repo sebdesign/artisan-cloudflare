@@ -1,73 +1,86 @@
 name: Tests
 
 on:
-  push:
-  pull_request:
+    push:
+    pull_request:
 
 jobs:
-  tests:
-    runs-on: ubuntu-latest
+    tests:
+        runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: true
-      matrix:
-        php: [8.1, 8.0]
-        laravel: [^9.0, ^8.0, '^7.0', ^6.0]
-        include:
-          - laravel: ^9.0
-            testbench: ^7.0
-          - laravel: ^8.0
-            testbench: ^6.0
-          - laravel: ^7.0
-            testbench: ^5.0
-          - laravel: ^6.0
-            testbench: ^4.0
-        exclude:
-          - laravel: ^7.0
-            php: 8.1
-          - laravel: ^6.0
-            php: 8.1
+        strategy:
+            fail-fast: true
+            matrix:
+                php: [8.2, 8.1, 8.0]
+                laravel: [^10.0, ^9.0, ^8.0, "^7.0", ^6.0]
+                include:
+                    - laravel: ^10.0
+                      testbench: ^8.0
+                    - laravel: ^9.0
+                      testbench: ^7.0
+                    - laravel: ^8.0
+                      testbench: ^6.0
+                    - laravel: ^7.0
+                      testbench: ^5.0
+                    - laravel: ^6.0
+                      testbench: ^4.0
+                exclude:
+                    - laravel: ^10.0
+                      php: 8.0
+                    - laravel: ^8.0
+                      php: 8.2
+                    - laravel: ^7.0
+                      php: 8.2
+                    - laravel: ^7.0
+                      php: 8.1
+                    - laravel: ^6.0
+                      php: 8.2
+                    - laravel: ^6.0
+                      php: 8.1
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }}
+        name: P${{ matrix.php }} - L${{ matrix.laravel }}
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip
-          tools: composer:v2
-          coverage: pcov
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  extensions: dom, curl, libxml, mbstring, zip
+                  tools: composer:v2
+                  coverage: pcov
 
-      - name: Setup problem matchers for PHP
-        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+            - name: Setup problem matchers for PHP
+              run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
 
-      - name: Setup problem matchers for PHPUnit
-        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+            - name: Setup problem matchers for PHPUnit
+              run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+            - name: Get composer cache directory
+              id: composer-cache
+              run: |
+                  echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-            path: ${{ steps.composer-cache.outputs.dir }}
-            key: $p{{ matrix.php }}-l{{ matrix.laravel }}-composer-${{ hashFiles('**/composer.json') }}
-            restore-keys: $p{{ matrix.php }}-l{{ matrix.laravel }}-composer-
+            - name: Cache dependencies
+              uses: actions/cache@v3
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: $p{{ matrix.php }}-l{{ matrix.laravel }}-composer-${{ hashFiles('**/composer.json') }}
+                  restore-keys: $p{{ matrix.php }}-l{{ matrix.laravel }}-composer-
 
-      - name: Install dependencies
-        run: |
-          composer require "illuminate/console:${{ matrix.laravel }}" "illuminate/support:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
-          composer update --prefer-dist --no-interaction --no-progress
+            - name: Install dependencies
+              run: |
+                  composer require "illuminate/console:${{ matrix.laravel }}" "illuminate/support:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+                  composer update --prefer-dist --no-interaction --no-progress
 
-      - name: Execute tests
-        run: vendor/bin/phpunit --verbose --whitelist=src --coverage-clover=build/coverage/clover.xml
+            - name: Execute tests
+              run: vendor/bin/phpunit --verbose --whitelist=src --coverage-clover=build/coverage/clover.xml
 
-      - name: Upload coverage
-        uses: sudo-bot/action-scrutinizer@latest
-        with:
-          cli-args: "--format=php-clover build/coverage/clover.xml"
+            - name: Upload coverage
+              uses: sudo-bot/action-scrutinizer@latest
+              with:
+                  cli-args: "--format=php-clover build/coverage/clover.xml"
