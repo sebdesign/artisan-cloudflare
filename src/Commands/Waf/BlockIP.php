@@ -125,8 +125,7 @@ class BlockIP extends Command
     /**
      * Block the given IP address.
      *
-     * @param  string $ip
-     * @var \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
+     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
      */
     private function block($zones)
     {
