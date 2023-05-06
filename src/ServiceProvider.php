@@ -64,8 +64,15 @@ class ServiceProvider extends IlluminateServiceProvider
             );
         });
 
+        $this->app->bind(Commands\Waf\BlockIP::class, function () {
+            return new Commands\Waf\BlockIP(
+                $this->app['config']['cloudflare.zones'] ?? []
+            );
+        });
+
         $this->commands([
             Commands\Cache\Purge::class,
+            Commands\Waf\BlockIP::class,
         ]);
     }
 
