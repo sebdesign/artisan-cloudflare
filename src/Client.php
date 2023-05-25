@@ -5,7 +5,8 @@ namespace Sebdesign\ArtisanCloudflare;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Promise;
+use GuzzleHttp\Promise\Each;
+use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -29,9 +30,6 @@ class Client
 
     /**
      * Constructor.
-     *
-     * @param  \GuzzleHttp\Client  $client
-     * @param  \Psr\Log\LoggerInterface  $logger
      */
     public function __construct(GuzzleClient $client, LoggerInterface $logger)
     {
@@ -50,7 +48,7 @@ class Client
      * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
      * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
      */
-    public function purge($zones)
+    public function purge(Collection $zones): Collection
     {
         return $zones->map(function (Zone $zone, $identifier) {
             return $this->delete($identifier, $zone);
@@ -59,12 +57,7 @@ class Client
         })->wait();
     }
 
-    /**
-     * @param  string  $identifier
-     * @param  \Sebdesign\ArtisanCloudflare\Zone  $zone
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    protected function delete($identifier, Zone $zone)
+    protected function delete(string $identifier, Zone $zone): PromiseInterface
     {
         return $this->client->deleteAsync("zones/{$identifier}/purge_cache", [
             \GuzzleHttp\RequestOptions::JSON => $zone,
@@ -78,13 +71,12 @@ class Client
      * The returned promise is fulfilled with a collection of results.
      *
      * @param  \Illuminate\Support\Collection<string,\GuzzleHttp\Promise\PromiseInterface>  $promises
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    protected function settle(Collection $promises)
+    protected function settle(Collection $promises): PromiseInterface
     {
         $results = new Collection();
 
-        return Promise\each(
+        return Each::of(
             $promises->getIterator(),
             $this->onFulfilled($results),
             $this->onRejected($results)
@@ -99,7 +91,7 @@ class Client
      * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $results
      * @return \Closure
      */
-    protected function onFulfilled($results)
+    protected function onFulfilled(Collection $results)
     {
         /*
          * @param  \Psr\Http\Message\ResponseInterface $response
@@ -117,7 +109,7 @@ class Client
      * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $results
      * @return \Closure
      */
-    protected function onRejected($results)
+    protected function onRejected(Collection $results)
     {
         /*
          * @param  \GuzzleHttp\Exception\RequestException $reason
@@ -136,11 +128,8 @@ class Client
 
     /**
      * Transform a request exception into a result object.
-     *
-     * @param  \GuzzleHttp\Exception\RequestException  $e
-     * @return \Sebdesign\ArtisanCloudflare\Zone
      */
-    protected function handleException(RequestException $e)
+    protected function handleException(RequestException $e): Zone
     {
         if ($e->hasResponse()) {
             /** @var \Psr\Http\Message\ResponseInterface $response */
@@ -168,21 +157,16 @@ class Client
 
     /**
      * Transform the response body into a result object.
-     *
-     * @param  \Psr\Http\Message\ResponseInterface  $response
-     * @return \Sebdesign\ArtisanCloudflare\Zone
      */
-    protected function getBody(ResponseInterface $response)
+    protected function getBody(ResponseInterface $response): Zone
     {
         return new Zone(json_decode($response->getBody(), true));
     }
 
     /**
      * Get the Guzzle client.
-     *
-     * @return \GuzzleHttp\ClientInterface
      */
-    public function getClient()
+    public function getClient(): GuzzleClient
     {
         return $this->client;
     }

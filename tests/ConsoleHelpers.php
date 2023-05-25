@@ -39,11 +39,8 @@ trait ConsoleHelpers
 
     /**
      * Assert that the given string is seen in the console output.
-     *
-     * @param  string  $text
-     * @return $this
      */
-    protected function seeInConsole($text)
+    protected function seeInConsole(string $text): self
     {
         $constraint = new StringContains($text, false);
 
@@ -54,11 +51,8 @@ trait ConsoleHelpers
 
     /**
      * Assert that the given string is not seen in the console output.
-     *
-     * @param  string  $text
-     * @return $this
      */
-    protected function dontSeeInConsole($text)
+    protected function dontSeeInConsole(string $text): self
     {
         $constraint = new LogicalNot(new StringContains($text));
 
@@ -69,33 +63,24 @@ trait ConsoleHelpers
 
     /**
      * Assert that the command returned with a success code.
-     *
-     * @param  int  $code
-     * @return $this
      */
-    protected function withSuccessCode($code = 0)
+    protected function withSuccessCode(int $code = 0): self
     {
         return $this->withExitCode($code);
     }
 
     /**
      * Assert that the command didn't returned with a success code.
-     *
-     * @param  int  $code
-     * @return $this
      */
-    protected function withoutSuccessCode($code = 0)
+    protected function withoutSuccessCode(int $code = 0): self
     {
         return $this->withoutExitCode($code);
     }
 
     /**
      * Assert that the command returned with the given code.
-     *
-     * @param  int  $code
-     * @return $this
      */
-    protected function withExitCode($code)
+    protected function withExitCode(int $code): self
     {
         $this->assertEquals($code, $this->code, "Exit code should be {$code}.");
 
@@ -104,11 +89,8 @@ trait ConsoleHelpers
 
     /**
      * Assert that the command returned without the given code.
-     *
-     * @param  int  $code
-     * @return $this
      */
-    protected function withoutExitCode($code)
+    protected function withoutExitCode(int $code): self
     {
         $this->assertNotEquals($code, $this->code, "Exit code shouldn\'t be {$code}.");
 
@@ -117,10 +99,8 @@ trait ConsoleHelpers
 
     /**
      * Dump the output from the last command.
-     *
-     * @return $this
      */
-    protected function dumpConsole()
+    protected function dumpConsole(): self
     {
         dump($this->output);
 

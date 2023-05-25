@@ -51,8 +51,6 @@ class Purge extends Command
 
     /**
      * Purge constructor.
-     *
-     * @param  array  $zones
      */
     public function __construct(array $zones)
     {
@@ -98,7 +96,7 @@ class Purge extends Command
      * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
      * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
      */
-    private function applyParameters($zones)
+    private function applyParameters(Collection $zones): Collection
     {
         $defaults = array_filter([
             'files' => $this->option('file'),
@@ -121,7 +119,7 @@ class Purge extends Command
      * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
      * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
      */
-    private function purge($zones)
+    private function purge(Collection $zones): Collection
     {
         $results = $this->client->purge($zones);
 
@@ -135,7 +133,7 @@ class Purge extends Command
      * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $results
      * @return void
      */
-    private function displayResults($zones, $results)
+    private function displayResults(Collection $zones, Collection $results): void
     {
         $headers = ['Status', 'Zone', 'Files', 'Tags', 'Hosts', 'Errors'];
 
@@ -192,11 +190,8 @@ class Purge extends Command
 
     /**
      * Format an array into a multiline string.
-     *
-     * @param  array  $items
-     * @return string
      */
-    private function formatItems(array $items)
+    private function formatItems(array $items): string
     {
         return implode("\n", $items);
     }
@@ -207,7 +202,7 @@ class Purge extends Command
      * @param  array[]  $errors
      * @return string[]
      */
-    private function formatErrors(array $errors)
+    private function formatErrors(array $errors): array
     {
         return array_map(function (array $error) {
             if (isset($error['code'])) {
@@ -223,7 +218,7 @@ class Purge extends Command
      *
      * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
      */
-    private function getZones()
+    private function getZones(): Collection
     {
         if (! $zone = $this->argument('zone')) {
             return $this->zones;
@@ -244,9 +239,8 @@ class Purge extends Command
      * Return 1 if all successes are false, otherwise return 0.
      *
      * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $results
-     * @return int
      */
-    private function getExitCode($results)
+    private function getExitCode(Collection $results): int
     {
         return (int) $results->filter(function (Zone $zone) {
             return $zone->get('success');

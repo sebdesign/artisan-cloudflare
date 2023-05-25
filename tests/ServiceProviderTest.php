@@ -11,7 +11,7 @@ class ServiceProviderTest extends TestCase
     /**
      * @test
      */
-    public function it_publishes_the_configuration()
+    public function it_publishes_the_configuration(): void
     {
         // Act
 
@@ -27,7 +27,7 @@ class ServiceProviderTest extends TestCase
     /**
      * @test
      */
-    public function it_merges_the_configuration()
+    public function it_merges_the_configuration(): void
     {
         // Arrange
 
@@ -49,7 +49,7 @@ class ServiceProviderTest extends TestCase
     /**
      * @test
      */
-    public function is_deferred()
+    public function is_deferred(): void
     {
         // Act
 
@@ -66,7 +66,7 @@ class ServiceProviderTest extends TestCase
     /**
      * @test
      */
-    public function it_registers_the_api_wrapper()
+    public function it_registers_the_api_wrapper(): void
     {
         // Arrange
 
@@ -88,7 +88,7 @@ class ServiceProviderTest extends TestCase
     /**
      * @test
      */
-    public function it_authenticates_with_an_api_token()
+    public function it_authenticates_with_an_api_token(): void
     {
         // Arrange
 
@@ -110,7 +110,7 @@ class ServiceProviderTest extends TestCase
     /**
      * @test
      */
-    public function it_authenticates_with_an_api_key()
+    public function it_authenticates_with_an_api_key(): void
     {
         // Arrange
 
@@ -136,7 +136,7 @@ class ServiceProviderTest extends TestCase
     /**
      * @test
      */
-    public function it_registers_the_purge_command()
+    public function it_registers_the_purge_command(): void
     {
         // Arrange
 
@@ -154,7 +154,7 @@ class ServiceProviderTest extends TestCase
     /**
      * @test
      */
-    public function it_provides_the_api_client()
+    public function it_provides_the_api_client(): void
     {
         $provider = new ServiceProvider($this->app);
 
@@ -164,7 +164,7 @@ class ServiceProviderTest extends TestCase
     /**
      * @test
      */
-    public function it_provides_the_purge_command()
+    public function it_provides_the_purge_command(): void
     {
         $provider = new ServiceProvider($this->app);
 
@@ -173,10 +173,8 @@ class ServiceProviderTest extends TestCase
 
     /**
      * Get the path of the configuration file to be published.
-     *
-     * @return string
      */
-    protected function getConfigurationPath()
+    protected function getConfigurationPath(): string
     {
         return key(ServiceProvider::pathsToPublish(null, 'config'));
     }

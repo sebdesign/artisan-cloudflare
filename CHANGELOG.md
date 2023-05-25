@@ -2,6 +2,11 @@
 
 All notable changes to `artisan-cloudflare` will be documented in this file.
 
+## 2.5.0 - 2023-05-25
+
+-   Remove support for Guzzle 6.x
+-   Remove support for PHP 7.1
+
 ## 2.4.7 - 2023-02-01
 
 -   Add support for Laravel 10 [#22](https://github.com/sebdesign/artisan-cloudflare/pull/22)

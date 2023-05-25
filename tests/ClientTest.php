@@ -12,8 +12,6 @@ class ClientTest extends TestCase
 
     /**
      * Setup the test environment.
-     *
-     * @return void
      */
     public function setUp(): void
     {
@@ -25,7 +23,7 @@ class ClientTest extends TestCase
     /**
      * @test
      */
-    public function it_purges_a_zone_with_success()
+    public function it_purges_a_zone_with_success(): void
     {
         // Arrange
 
@@ -50,7 +48,7 @@ class ClientTest extends TestCase
     /**
      * @test
      */
-    public function it_handles_client_errors()
+    public function it_handles_client_errors(): void
     {
         // Arrange
 
@@ -78,7 +76,7 @@ class ClientTest extends TestCase
     /**
      * @test
      */
-    public function it_handles_server_errors()
+    public function it_handles_server_errors(): void
     {
         // Arrange
 

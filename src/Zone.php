@@ -14,13 +14,13 @@ class Zone implements JsonSerializable
         $this->parameters = $parameters;
     }
 
-    public function replace(array $parameters)
+    public function replace(array $parameters): void
     {
         $this->parameters = $parameters;
     }
 
     #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         if (empty($this->parameters)) {
             return ['purge_everything' => true];

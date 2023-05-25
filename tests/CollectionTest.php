@@ -16,7 +16,7 @@ class CollectionTest extends TestCase
     /**
      * @test
      */
-    public function it_transposes_a_collection()
+    public function it_transposes_a_collection(): void
     {
         // Arrange
 
@@ -68,7 +68,7 @@ class CollectionTest extends TestCase
     /**
      * @test
      */
-    public function it_inserts_a_value_between_items()
+    public function it_inserts_a_value_between_items(): void
     {
         // Arrange
 
@@ -98,7 +98,7 @@ class CollectionTest extends TestCase
     /**
      * @test
      */
-    public function it_reorders_a_collection()
+    public function it_reorders_a_collection(): void
     {
         // Arrange
 

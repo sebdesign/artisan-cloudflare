@@ -29,12 +29,8 @@ trait GuzzleHelpers
 
     /**
      * Assert the request URI contains the given path.
-     *
-     * @param  array  $transaction
-     * @param  string  $path
-     * @return self
      */
-    protected function seeRequestContainsPath(array $transaction, $path)
+    protected function seeRequestContainsPath(array $transaction, string $path): self
     {
         $constraint = new StringContains($path, false);
 
@@ -45,12 +41,8 @@ trait GuzzleHelpers
 
     /**
      * Assert the request has the given JSON body.
-     *
-     * @param  array  $transaction
-     * @param  array  $body
-     * @return self
      */
-    protected function seeRequestWithBody(array $transaction, array $body)
+    protected function seeRequestWithBody(array $transaction, array $body): self
     {
         $this->assertEquals(json_encode($body), (string) $transaction['request']->getBody());
 
@@ -59,10 +51,8 @@ trait GuzzleHelpers
 
     /**
      * Mock the Guzzle client.
-     *
-     * @return void
      */
-    protected function mockClient()
+    protected function mockClient(): void
     {
         // Attach a mock handler to the handler stack.
         $this->handler = new MockHandler();
@@ -89,35 +79,35 @@ trait GuzzleHelpers
         $this->instance(Client::class, new Client($guzzle, $this->app['log']));
     }
 
-    protected function mockSuccessResponse()
+    protected function mockSuccessResponse(): void
     {
-        return $this->mockResponse(200, [], [
+        $this->mockResponse(200, [], [
             'success' => true,
             'errors' => [],
         ]);
     }
 
-    protected function mockClientErrorResponse(array $errors)
+    protected function mockClientErrorResponse(array $errors): void
     {
-        return $this->mockResponse(400, [], [
+        $this->mockResponse(400, [], [
             'success' => false,
             'errors' => $errors,
         ]);
     }
 
-    protected function mockRequestException($message, $url)
+    protected function mockRequestException(string $message, string $url): void
     {
         $request = new Request('DELETE', $url);
 
-        return $this->handler->append(new RequestException($message, $request));
+        $this->handler->append(new RequestException($message, $request));
     }
 
-    protected function mockServerErrorResponse($message)
+    protected function mockServerErrorResponse($message): void
     {
-        return $this->handler->append(new Response(500, [], $message));
+        $this->handler->append(new Response(500, [], $message));
     }
 
-    protected function mockResponse($status, array $headers, array $body)
+    protected function mockResponse(int $status, array $headers, array $body): void
     {
         $this->handler->append(new Response($status, $headers, json_encode($body)));
     }

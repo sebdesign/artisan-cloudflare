@@ -8,8 +8,6 @@ class PurgeCommandTest extends TestCase
 
     /**
      * Setup the test environment.
-     *
-     * @return void
      */
     public function setUp(): void
     {
@@ -21,7 +19,7 @@ class PurgeCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_fails_if_no_zone_identifier_is_found()
+    public function it_fails_if_no_zone_identifier_is_found(): void
     {
         // Arrange
 
@@ -42,7 +40,7 @@ class PurgeCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_outputs_an_error_if_the_api_throws_an_exception()
+    public function it_outputs_an_error_if_the_api_throws_an_exception(): void
     {
         // Arrange
 
@@ -68,7 +66,7 @@ class PurgeCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_outputs_an_error_if_the_api_returns_an_error()
+    public function it_outputs_an_error_if_the_api_returns_an_error(): void
     {
         // Arrange
 
@@ -100,7 +98,7 @@ class PurgeCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_runs_without_arguments_and_options()
+    public function it_runs_without_arguments_and_options(): void
     {
         // Arrange
 
@@ -136,7 +134,7 @@ class PurgeCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_accepts_an_existing_zone()
+    public function it_accepts_an_existing_zone(): void
     {
         // Arrange
 
@@ -164,7 +162,7 @@ class PurgeCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_accepts_a_custom_zone()
+    public function it_accepts_a_custom_zone(): void
     {
         // Arrange
 
@@ -193,7 +191,7 @@ class PurgeCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_accepts_files()
+    public function it_accepts_files(): void
     {
         // Arrange
 
@@ -229,7 +227,7 @@ class PurgeCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_accepts_tags()
+    public function it_accepts_tags(): void
     {
         // Arrange
 
@@ -265,7 +263,7 @@ class PurgeCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_accepts_hosts()
+    public function it_accepts_hosts(): void
     {
         // Arrange
 
@@ -301,7 +299,7 @@ class PurgeCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_accepts_files_and_tags_and_hosts()
+    public function it_accepts_files_and_tags_and_hosts(): void
     {
         // Arrange
 
@@ -347,7 +345,7 @@ class PurgeCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_accepts_a_zone_with_files_and_files_and_tags()
+    public function it_accepts_a_zone_with_files_and_files_and_tags(): void
     {
         // Arrange
 

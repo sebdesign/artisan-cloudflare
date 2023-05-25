@@ -11,7 +11,7 @@ class ServiceProvider extends IlluminateServiceProvider
     /**
      * Bootstrap the application services.
      */
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -20,7 +20,7 @@ class ServiceProvider extends IlluminateServiceProvider
         }
     }
 
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/cloudflare.php', 'cloudflare');
 
@@ -29,7 +29,7 @@ class ServiceProvider extends IlluminateServiceProvider
         $this->registerMacros();
     }
 
-    protected function registerClient()
+    protected function registerClient(): void
     {
         $this->app->bind(Client::class, function () {
             return new Client(
@@ -39,7 +39,7 @@ class ServiceProvider extends IlluminateServiceProvider
         });
     }
 
-    protected function bootGuzzleClient()
+    protected function bootGuzzleClient(): GuzzleClient
     {
         $config = $this->app['config']['cloudflare'];
 
@@ -56,7 +56,7 @@ class ServiceProvider extends IlluminateServiceProvider
         ]);
     }
 
-    protected function registerCommands()
+    protected function registerCommands(): void
     {
         $this->app->bind(Commands\Cache\Purge::class, function () {
             return new Commands\Cache\Purge(
@@ -69,7 +69,7 @@ class ServiceProvider extends IlluminateServiceProvider
         ]);
     }
 
-    protected function registerMacros()
+    protected function registerMacros(): void
     {
         /*
          * Transpose with keys.
