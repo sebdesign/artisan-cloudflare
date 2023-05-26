@@ -125,7 +125,7 @@ class BlockIpCommandTest extends TestCase
         $options = [
             'mode' => 'block',
             'configuration' => [ 
-                'target' => 'ip','value' => '6.6.6.6'
+                'target' => 'ip', 'value' => '6.6.6.6',
             ],
             'notes' => 'Blocked by artisan command.',
         ];
@@ -180,7 +180,7 @@ class BlockIpCommandTest extends TestCase
         $this->seeRequestWithBody($zoneA, [
             'mode' => 'block',
             'configuration' => [
-                'target' => 'ip6','value' => '2001:0db8:85a3:0000:0000:8a2e:0370:7334'
+                'target' => 'ip6', 'value' => '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
             ],
             'notes' => 'Blocked by artisan command.',
         ]);
@@ -214,7 +214,7 @@ class BlockIpCommandTest extends TestCase
         $this->seeRequestWithBody($zoneA, [
             'mode' => 'block',
             'configuration' => [
-                'target' => 'ip','value' => '6.6.6.6'
+                'target' => 'ip', 'value' => '6.6.6.6',
             ],
             'notes' => 'foo',
         ]);
@@ -246,7 +246,7 @@ class BlockIpCommandTest extends TestCase
         $this->seeRequestWithBody($zoneB, [
             'mode' => 'block',
             'configuration' => [
-                'target' => 'ip','value' => '6.6.6.6'
+                'target' => 'ip', 'value' => '6.6.6.6',
             ],
             'notes' => 'Blocked by artisan command.',
         ]);

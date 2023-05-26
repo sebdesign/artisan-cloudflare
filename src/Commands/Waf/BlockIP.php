@@ -84,7 +84,7 @@ class BlockIP extends Command
 
         $target = $this->isIPv4($ip) ? 'ip' : ($this->isIPv6($ip) ? 'ip6' : null);
 
-        if (!$target) {
+        if (! $target) {
             $this->error('Please supply a valid IP address.');
 
             return 1;
@@ -249,6 +249,7 @@ class BlockIP extends Command
 
     /**
      * Check if the given IP address is IPv4.
+     * 
      * @param  string  $ip
      * @return bool
      */
@@ -259,6 +260,7 @@ class BlockIP extends Command
 
     /**
      * Check if the given IP address is IPv6.
+     * 
      * @param  string  $ip
      * @return bool
      */

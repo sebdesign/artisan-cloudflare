@@ -59,6 +59,7 @@ class Client
 
     /**
      * Block the given IP address.
+     *
      * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
      * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
      */
