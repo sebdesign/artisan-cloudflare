@@ -22,7 +22,7 @@ class BlockIpCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_fails_if_no_zone_identifier_is_found()
+    public function it_fails_if_no_zone_identifier_is_found(): void
     {
         // Arrange
 
@@ -43,7 +43,7 @@ class BlockIpCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_fails_if_ip_is_not_valid()
+    public function it_fails_if_ip_is_not_valid(): void
     {
         // Act
 
@@ -60,7 +60,7 @@ class BlockIpCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_outputs_an_error_if_the_api_throws_an_exception()
+    public function it_outputs_an_error_if_the_api_throws_an_exception(): void
     {
         // Arrange
 
@@ -86,7 +86,7 @@ class BlockIpCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_outputs_an_error_if_the_api_returns_an_error()
+    public function it_outputs_an_error_if_the_api_returns_an_error(): void
     {
         // Arrange
 
@@ -118,7 +118,7 @@ class BlockIpCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_runs_without_zone_argument()
+    public function it_runs_without_zone_argument(): void
     {
         // Arrange
 
@@ -159,7 +159,7 @@ class BlockIpCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_runs_with_ipv6_address()
+    public function it_runs_with_ipv6_address(): void
     {
         // Arrange
 
@@ -193,7 +193,7 @@ class BlockIpCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_runs_with_notes_argument()
+    public function it_runs_with_notes_argument(): void
     {
         // Arrange
 
@@ -226,7 +226,7 @@ class BlockIpCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_accepts_an_existing_zone()
+    public function it_accepts_an_existing_zone(): void
     {
         // Arrange
 
@@ -260,7 +260,7 @@ class BlockIpCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_accepts_a_custom_zone()
+    public function it_accepts_a_custom_zone(): void
     {
         // Arrange
 
