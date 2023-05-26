@@ -60,9 +60,9 @@ class Client
     /**
      * Block the given IP address.
      * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
      */
-    public function blockIP($zones)
+    public function blockIP($zones): Collection
     {
         return $zones->map(function (Zone $zone, $identifier) {
             return $this->client->postAsync("zones/{$identifier}/firewall/access_rules/rules", [

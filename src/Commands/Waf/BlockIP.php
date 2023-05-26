@@ -106,7 +106,7 @@ class BlockIP extends Command
      * @param  string  $target
      * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
      */
-    private function applyParameters($zones, $target)
+    private function applyParameters($zones, $target): Collection
     {
         $parameters = [
             'mode' => 'block',
@@ -127,7 +127,7 @@ class BlockIP extends Command
      *
      * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
      */
-    private function block($zones)
+    private function block($zones): Collection
     {
         return $this->client->blockIP($zones);
     }
@@ -139,7 +139,7 @@ class BlockIP extends Command
      * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $results
      * @return void
      */
-    private function displayResults($zones, $results)
+    private function displayResults($zones, $results): void
     {
         $headers = ['Status', 'Zone', 'IP', 'Errors'];
 
@@ -188,7 +188,7 @@ class BlockIP extends Command
      * @param  array  $items
      * @return string
      */
-    private function formatItems(array $items)
+    private function formatItems(array $items): string
     {
         return implode("\n", $items);
     }
@@ -199,7 +199,7 @@ class BlockIP extends Command
      * @param  array[]  $errors
      * @return string[]
      */
-    private function formatErrors(array $errors)
+    private function formatErrors(array $errors): array
     {
         return array_map(function (array $error) {
             if (isset($error['code'])) {
@@ -215,7 +215,7 @@ class BlockIP extends Command
      *
      * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
      */
-    private function getZones()
+    private function getZones(): Collection
     {
         if (! $zone = $this->argument('zone')) {
             return $this->zones;
@@ -238,7 +238,7 @@ class BlockIP extends Command
      * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $results
      * @return int
      */
-    private function getExitCode($results)
+    private function getExitCode($results): int
     {
         return (int) $results->filter(function (Zone $zone) {
             return $zone->get('success');
@@ -250,7 +250,7 @@ class BlockIP extends Command
      * @param  string  $ip
      * @return bool
      */
-    private function isIPv4($ip)
+    private function isIPv4($ip): bool
     {
         return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
     }
@@ -260,7 +260,7 @@ class BlockIP extends Command
      * @param  string  $ip
      * @return bool
      */
-    private function isIPv6($ip)
+    private function isIPv6($ip): bool
     {
         return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
     }
