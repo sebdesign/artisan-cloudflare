@@ -280,7 +280,7 @@ class BlockIpCommandTest extends TestCase
         $this->seeRequestWithBody($customZone, [
             'mode' => 'block',
             'configuration' => [
-                'target' => 'ip','value' => '6.6.6.6',
+                'target' => 'ip', 'value' => '6.6.6.6',
             ],
             'notes' => 'Blocked by artisan command.',
         ]);
