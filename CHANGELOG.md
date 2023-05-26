@@ -2,6 +2,10 @@
 
 All notable changes to `artisan-cloudflare` will be documented in this file.
 
+## 2.6.0 - 2023-05-26
+
+- Add Block IP command by @oscar-ol in [#23](https://github.com/sebdesign/artisan-cloudflare/pull/23)
+
 ## 2.5.0 - 2023-05-25
 
 -   Remove support for Guzzle 6.x
