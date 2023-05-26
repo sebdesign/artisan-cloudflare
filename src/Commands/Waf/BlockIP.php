@@ -249,7 +249,7 @@ class BlockIP extends Command
 
     /**
      * Check if the given IP address is IPv4.
-     * 
+     *
      * @param  string  $ip
      * @return bool
      */
@@ -260,7 +260,7 @@ class BlockIP extends Command
 
     /**
      * Check if the given IP address is IPv6.
-     * 
+     *
      * @param  string  $ip
      * @return bool
      */
