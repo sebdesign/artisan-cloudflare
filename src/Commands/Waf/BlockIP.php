@@ -245,11 +245,21 @@ class BlockIP extends Command
         })->isEmpty();
     }
 
+    /**
+     * Check if the given IP address is IPv4.
+     * @param  string  $ip
+     * @return bool
+     */
     private function isIPv4($ip)
     {
         return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
     }
 
+    /**
+     * Check if the given IP address is IPv6.
+     * @param  string  $ip
+     * @return bool
+     */
     private function isIPv6($ip)
     {
         return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
