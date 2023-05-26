@@ -48,6 +48,31 @@ class ClientTest extends TestCase
     /**
      * @test
      */
+    public function it_blocks_ip_address_with_success(): void
+    {
+        // Arrange
+
+        $client = $this->app[Client::class];
+        $this->mockResponse(200, [], ['success' => true]);
+
+        // Act
+
+        $results = $client->blockIP(Collection::make([
+            'foo' => new Zone(['bar' => 'baz']),
+        ]));
+
+        // Assert
+
+        $this->assertCount(1, $this->transactions);
+        $this->assertCount(1, $results);
+        $this->seeRequestWithBody($this->transactions->first(), ['bar' => 'baz']);
+        $this->seeRequestContainsPath($this->transactions->first(), 'foo');
+        $this->assertEquals(new Zone(['success' => true]), $results->get('foo'));
+    }
+
+    /**
+     * @test
+     */
     public function it_handles_client_errors(): void
     {
         // Arrange

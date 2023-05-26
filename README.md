@@ -95,6 +95,8 @@ return [
 
 ## Usage
 
+### Purge command
+
 > Read more about [Purging cached resources from Cloudflare
 ](https://support.cloudflare.com/hc/en-us/articles/200169246-Purging-cached-resources-from-Cloudflare) on the support article.
 
@@ -146,6 +148,31 @@ php artisan cloudflare:cache:purge --file="http://example.com/css/app.css" --tag
 
 ``` bash
 php artisan cloudflare:cache:purge 023e105f4ecef8ad9ca31a8372d0c353 --file="http://example.com/css/app.css" --tag=scripts --tag=images --host=www.example.com
+```
+
+### Block IP command
+#### Block an IP address for all the zones.
+
+``` bash
+php artisan cloudflare:waf:block-ip 6.6.6.6
+```
+
+#### Block an IP address for a specific zone.
+
+``` bash
+php artisan cloudflare:waf:block-ip 6.6.6.6 023e105f4ecef8ad9ca31a8372d0c353
+```
+
+#### Block an IP address for all the zones with a custom comment.
+
+``` bash
+php artisan cloudflare:waf:block-ip 6.6.6.6 --notes="By Artisan Cloudflare"
+```
+
+#### Block an IP address for a specific zone with a custom comment.
+
+``` bash
+php artisan cloudflare:waf:block-ip 6.6.6.6 023e105f4ecef8ad9ca31a8372d0c353 --notes="By Artisan Cloudflare"
 ```
 
 ## Changelog

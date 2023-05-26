@@ -57,6 +57,23 @@ class Client
         })->wait();
     }
 
+    /**
+     * Block the given IP address.
+     *
+     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
+     * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
+     */
+    public function blockIP($zones): Collection
+    {
+        return $zones->map(function (Zone $zone, $identifier) {
+            return $this->client->postAsync("zones/{$identifier}/firewall/access_rules/rules", [
+                \GuzzleHttp\RequestOptions::JSON => $zone,
+            ]);
+        })->pipe(function ($promises) {
+            return $this->settle($promises);
+        })->wait();
+    }
+
     protected function delete(string $identifier, Zone $zone): PromiseInterface
     {
         return $this->client->deleteAsync("zones/{$identifier}/purge_cache", [
