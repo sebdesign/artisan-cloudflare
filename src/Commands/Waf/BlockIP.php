@@ -23,7 +23,9 @@ class BlockIP extends Command
      *
      * @var string
      */
-    protected $signature = 'cloudflare:waf:block-ip {ip : The IP address to block.} {zone? : A zone identifier.} {notes? : Notes that will be attached to the rule.}';
+    protected $signature = 'cloudflare:waf:block-ip {ip : The IP address to block.} 
+      {zone? : A zone identifier.} 
+      {--notes= : Notes that will be attached to the rule.}';
 
     /**
      * The name and signature of the console command.
@@ -114,7 +116,7 @@ class BlockIP extends Command
                 'target' => $target,
                 'value' => $this->argument('ip'),
             ],
-            'notes' => $this->argument('notes') ?? 'Blocked by artisan command.',
+            'notes' => $this->option('notes') ?? 'Blocked by artisan command.',
         ];
 
         return $zones->each(function (Zone $zone) use ($parameters) {

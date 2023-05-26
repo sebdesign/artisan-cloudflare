@@ -202,7 +202,7 @@ class BlockIpCommandTest extends TestCase
 
         // Act
 
-        $this->artisan('cloudflare:waf:block-ip', ['ip' => '6.6.6.6', 'notes' => 'foo']);
+        $this->artisan('cloudflare:waf:block-ip', ['ip' => '6.6.6.6', '--notes' => 'foo']);
 
         // Assert
 
