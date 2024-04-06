@@ -1,4 +1,4 @@
-name: Tests
+name: Tests php 7.x
 
 on:
   push:
@@ -9,52 +9,43 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
-        php: [7.2, 7.3, 7.4, '8.2']
-        laravel: ['5.5.*', '5.6.*', '5.7.*', '5.8.*', '11.0', ^6.0, ^7.0, ^8.0]
+        php: [7.2, 7.3, 7.4]
+        laravel: ['5.5.*', '5.6.*', '5.7.*', '5.8.*', ^6.0, ^7.0, ^8.0]
         include:
-          - laravel: ^8.0
-            testbench: ^6.0
-            phpunit: 9.3
-          - laravel: ^7.0
-            testbench: ^5.0
-            phpunit: 8.5
-          - laravel: ^6.0
-            testbench: ^4.0
-            phpunit: 8.5
-          - laravel: 5.8.*
-            testbench: ^3.8
-            phpunit: 7.5
-          - laravel: 5.7.*
-            testbench: ^3.7
-            phpunit: 7.0
-          - laravel: 5.6.*
-            testbench: ^3.6
-            phpunit: 7.0
           - laravel: 5.5.*
             testbench: ^3.5
             phpunit: 6.0
-          - laravel: '11.0'
-            testbench: ^9.0
-            phpunit: '8.2'
-        exclude:
-          - laravel: ^8.0
-            php: 7.2
+          - laravel: 5.6.*
+            testbench: ^3.6
+            phpunit: 7.0
           - laravel: 5.7.*
-            php: 7.4
-          - laravel: 5.6.*
-            php: 7.4
-          - laravel: 5.6.*
-            php: 7.3
+            testbench: ^3.7
+            phpunit: 7.0
+          - laravel: 5.8.*
+            testbench: ^3.8
+            phpunit: 7.5
+          - laravel: ^6.0
+            testbench: ^4.0
+            phpunit: 8.5
+          - laravel: ^7.0
+            testbench: ^5.0
+            phpunit: 8.5
+          - laravel: ^8.0
+            testbench: ^6.0
+            phpunit: 9.3
+        exclude:
           - laravel: 5.5.*
             php: 7.4
-          - laravel: 11.*
-            php: 7.2
-          - laravel: 11.*
+          - laravel: 5.6.*
             php: 7.3
-          - laravel: 11.*
+          - laravel: 5.6.*
             php: 7.4
+          - laravel: 5.7.*
+            php: 7.4
+          - laravel: ^8.0
+            php: 7.2
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }}
 
@@ -92,6 +83,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          composer config --no-plugins allow-plugins.kylekatarnls/update-helper true
           composer require "illuminate/console:${{ matrix.laravel }}" "illuminate/support:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "phpunit/phpunit:^${{ matrix.phpunit }}" --no-interaction --no-update
           composer update --prefer-dist --no-interaction --no-progress
 
