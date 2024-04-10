@@ -2,9 +2,14 @@
 
 All notable changes to `artisan-cloudflare` will be documented in this file.
 
+## 2.7.0 - 2024-04-10
+
+-   Fix Github Actions Tests and migrate config Phpunit by @oscar-ol in [#26](https://github.com/sebdesign/artisan-cloudflare/pull/26)
+-   Laravel 11.x Compatibility [#24](https://github.com/sebdesign/artisan-cloudflare/pull/24)
+
 ## 2.6.0 - 2023-05-26
 
-- Add Block IP command by @oscar-ol in [#23](https://github.com/sebdesign/artisan-cloudflare/pull/23)
+-   Add Block IP command by @oscar-ol in [#23](https://github.com/sebdesign/artisan-cloudflare/pull/23)
 
 ## 2.5.0 - 2023-05-25
 
