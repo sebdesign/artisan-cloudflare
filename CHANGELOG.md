@@ -2,6 +2,10 @@
 
 All notable changes to `artisan-cloudflare` will be documented in this file.
 
+## 2.8.0 - 2025-02-20
+
+-   Laravel 12.x Compatibility [#27](https://github.com/sebdesign/artisan-cloudflare/pull/27)
+
 ## 2.7.0 - 2024-04-10
 
 -   Fix Github Actions Tests and migrate config Phpunit by @oscar-ol in [#26](https://github.com/sebdesign/artisan-cloudflare/pull/26)
