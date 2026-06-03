@@ -2,6 +2,12 @@
 
 All notable changes to `artisan-cloudflare` will be documented in this file.
 
+## 2.9.0 - 2026-06-03
+
+-   Laravel 13.x Compatibility [#28](https://github.com/sebdesign/artisan-cloudflare/pull/28)
+-   Drop support for PHP 7.x
+-   Drop support for Laravel 5.x
+
 ## 2.8.0 - 2025-02-20
 
 -   Laravel 12.x Compatibility [#27](https://github.com/sebdesign/artisan-cloudflare/pull/27)

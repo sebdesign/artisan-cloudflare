@@ -3,6 +3,7 @@
 namespace Sebdesign\ArtisanCloudflare;
 
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
@@ -52,7 +53,7 @@ class ServiceProvider extends IlluminateServiceProvider
 
         return new GuzzleClient([
             'base_uri' => Client::BASE_URI,
-            \GuzzleHttp\RequestOptions::HEADERS => $authorization,
+            RequestOptions::HEADERS => $authorization,
         ]);
     }
 

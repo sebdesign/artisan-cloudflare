@@ -2,6 +2,8 @@
 
 namespace Sebdesign\ArtisanCloudflare\Test;
 
+use PHPUnit\Framework\Attributes\Test;
+
 class BlockIpCommandTest extends TestCase
 {
     use ConsoleHelpers;
@@ -9,19 +11,15 @@ class BlockIpCommandTest extends TestCase
 
     /**
      * Setup the test environment.
-     *
-     * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->mockClient();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fails_if_no_zone_identifier_is_found(): void
     {
         // Arrange
@@ -40,9 +38,7 @@ class BlockIpCommandTest extends TestCase
             ->withoutSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fails_if_ip_is_not_valid(): void
     {
         // Act
@@ -57,9 +53,7 @@ class BlockIpCommandTest extends TestCase
             ->withoutSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_outputs_an_error_if_the_api_throws_an_exception(): void
     {
         // Arrange
@@ -83,9 +77,7 @@ class BlockIpCommandTest extends TestCase
             ->withoutSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_outputs_an_error_if_the_api_returns_an_error(): void
     {
         // Arrange
@@ -115,9 +107,7 @@ class BlockIpCommandTest extends TestCase
             ->withoutSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_runs_without_zone_argument(): void
     {
         // Arrange
@@ -156,9 +146,7 @@ class BlockIpCommandTest extends TestCase
             ->withSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_runs_with_ipv6_address(): void
     {
         // Arrange
@@ -190,9 +178,7 @@ class BlockIpCommandTest extends TestCase
             ->withSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_runs_with_notes_argument(): void
     {
         // Arrange
@@ -223,9 +209,7 @@ class BlockIpCommandTest extends TestCase
             ->withSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_accepts_an_existing_zone(): void
     {
         // Arrange
@@ -257,9 +241,7 @@ class BlockIpCommandTest extends TestCase
             ->withSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_accepts_a_custom_zone(): void
     {
         // Arrange
@@ -287,7 +269,7 @@ class BlockIpCommandTest extends TestCase
 
         $this->seeInConsole('my-zone')
             ->dontSeeInConsole('zone-identifier')
-            ->SeeInConsole('6.6.6.6')
+            ->seeInConsole('6.6.6.6')
             ->withSuccessCode();
     }
 }

@@ -37,21 +37,19 @@ class BlockIP extends Command
     /**
      * CloudFlare API client.
      *
-     * @var \Sebdesign\ArtisanCloudflare\Client
+     * @var Client
      */
     private $client;
 
     /**
      * API item identifier tags.
      *
-     * @var \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
+     * @var Collection<string,Zone>
      */
     private $zones;
 
     /**
      * Purge constructor.
-     *
-     * @param  array  $zones
      */
     public function __construct(array $zones)
     {
@@ -65,7 +63,6 @@ class BlockIP extends Command
     /**
      * Execute the console command.
      *
-     * @param  \Sebdesign\ArtisanCloudflare\Client  $client
      * @return int
      */
     public function handle(Client $client)
@@ -104,9 +101,9 @@ class BlockIP extends Command
      *
      * Use the config for each zone, unless options are passed in the command.
      *
-     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
+     * @param  Collection<string,Zone>  $zones
      * @param  string  $target
-     * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
+     * @return Collection<string,Zone>
      */
     private function applyParameters($zones, $target): Collection
     {
@@ -127,7 +124,7 @@ class BlockIP extends Command
     /**
      * Block the given IP address.
      *
-     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
+     * @param  Collection<string,Zone>  $zones
      */
     private function block($zones): Collection
     {
@@ -137,9 +134,8 @@ class BlockIP extends Command
     /**
      * Display a table with the results.
      *
-     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
-     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $results
-     * @return void
+     * @param  Collection<string,Zone>  $zones
+     * @param  Collection<string,Zone>  $results
      */
     private function displayResults($zones, $results): void
     {
@@ -179,16 +175,13 @@ class BlockIP extends Command
             'errors' => $errors,
         ]);
 
-        $rows = $columns->_transpose()->insertBetween(new TableSeparator());
+        $rows = $columns->_transpose()->insertBetween(new TableSeparator);
 
         $this->table([$title, $headers], $rows);
     }
 
     /**
      * Format an array into a multiline string.
-     *
-     * @param  array  $items
-     * @return string
      */
     private function formatItems(array $items): string
     {
@@ -215,7 +208,7 @@ class BlockIP extends Command
     /**
      * Get the zone identifier from the input argument or the configuration.
      *
-     * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
+     * @return Collection<string,Zone>
      */
     private function getZones(): Collection
     {
@@ -230,15 +223,14 @@ class BlockIP extends Command
         }
 
         return new Collection([
-            $zone => new Zone(),
+            $zone => new Zone,
         ]);
     }
 
     /**
      * Return 1 if all successes are false, otherwise return 0.
      *
-     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $results
-     * @return int
+     * @param  Collection<string,Zone>  $results
      */
     private function getExitCode($results): int
     {
@@ -251,7 +243,6 @@ class BlockIP extends Command
      * Check if the given IP address is IPv4.
      *
      * @param  string  $ip
-     * @return bool
      */
     private function isIPv4($ip): bool
     {
@@ -262,7 +253,6 @@ class BlockIP extends Command
      * Check if the given IP address is IPv6.
      *
      * @param  string  $ip
-     * @return bool
      */
     private function isIPv6($ip): bool
     {

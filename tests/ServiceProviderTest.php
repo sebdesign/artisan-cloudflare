@@ -2,15 +2,14 @@
 
 namespace Sebdesign\ArtisanCloudflare\Test;
 
+use PHPUnit\Framework\Attributes\Test;
 use Sebdesign\ArtisanCloudflare\Client;
 use Sebdesign\ArtisanCloudflare\Commands\Cache\Purge;
 use Sebdesign\ArtisanCloudflare\ServiceProvider;
 
 class ServiceProviderTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_publishes_the_configuration(): void
     {
         // Act
@@ -24,9 +23,7 @@ class ServiceProviderTest extends TestCase
         $this->assertFileExists($path);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_merges_the_configuration(): void
     {
         // Arrange
@@ -46,9 +43,7 @@ class ServiceProviderTest extends TestCase
         $this->assertEquals($this->app['config']['cloudflare'], $config);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function is_deferred(): void
     {
         // Act
@@ -63,9 +58,7 @@ class ServiceProviderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_registers_the_api_wrapper(): void
     {
         // Arrange
@@ -85,9 +78,7 @@ class ServiceProviderTest extends TestCase
         $this->assertEquals(Client::BASE_URI, $base_uri);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_authenticates_with_an_api_token(): void
     {
         // Arrange
@@ -107,9 +98,7 @@ class ServiceProviderTest extends TestCase
         $this->assertEquals('Bearer API_TOKEN', $headers['Authorization']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_authenticates_with_an_api_key(): void
     {
         // Arrange
@@ -133,9 +122,7 @@ class ServiceProviderTest extends TestCase
         $this->assertEquals('email@example.com', $headers['X-Auth-Email']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_registers_the_purge_command(): void
     {
         // Arrange
@@ -151,9 +138,7 @@ class ServiceProviderTest extends TestCase
         $this->assertInstanceOf(Purge::class, $command);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_provides_the_api_client(): void
     {
         $provider = new ServiceProvider($this->app);
@@ -161,9 +146,7 @@ class ServiceProviderTest extends TestCase
         $this->assertContains(Client::class, $provider->provides());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_provides_the_purge_command(): void
     {
         $provider = new ServiceProvider($this->app);

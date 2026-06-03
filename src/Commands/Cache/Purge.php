@@ -38,14 +38,14 @@ class Purge extends Command
     /**
      * CloudFlare API client.
      *
-     * @var \Sebdesign\ArtisanCloudflare\Client
+     * @var Client
      */
     private $client;
 
     /**
      * API item identifier tags.
      *
-     * @var \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
+     * @var Collection<string,Zone>
      */
     private $zones;
 
@@ -64,7 +64,6 @@ class Purge extends Command
     /**
      * Execute the console command.
      *
-     * @param  \Sebdesign\ArtisanCloudflare\Client  $client
      * @return int
      */
     public function handle(Client $client)
@@ -93,8 +92,8 @@ class Purge extends Command
      *
      * Use the config for each zone, unless options are passed in the command.
      *
-     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
-     * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
+     * @param  Collection<string,Zone>  $zones
+     * @return Collection<string,Zone>
      */
     private function applyParameters(Collection $zones): Collection
     {
@@ -116,8 +115,8 @@ class Purge extends Command
     /**
      * Execute the purging operations and return each result.
      *
-     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
-     * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
+     * @param  Collection<string,Zone>  $zones
+     * @return Collection<string,Zone>
      */
     private function purge(Collection $zones): Collection
     {
@@ -129,9 +128,8 @@ class Purge extends Command
     /**
      * Display a table with the results.
      *
-     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $zones
-     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $results
-     * @return void
+     * @param  Collection<string,Zone>  $zones
+     * @param  Collection<string,Zone>  $results
      */
     private function displayResults(Collection $zones, Collection $results): void
     {
@@ -183,7 +181,7 @@ class Purge extends Command
             'errors' => $errors,
         ]);
 
-        $rows = $columns->_transpose()->insertBetween(new TableSeparator());
+        $rows = $columns->_transpose()->insertBetween(new TableSeparator);
 
         $this->table([$title, $headers], $rows);
     }
@@ -216,7 +214,7 @@ class Purge extends Command
     /**
      * Get the zone identifier from the input argument or the configuration.
      *
-     * @return \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>
+     * @return Collection<string,Zone>
      */
     private function getZones(): Collection
     {
@@ -231,14 +229,14 @@ class Purge extends Command
         }
 
         return new Collection([
-            $zone => new Zone(),
+            $zone => new Zone,
         ]);
     }
 
     /**
      * Return 1 if all successes are false, otherwise return 0.
      *
-     * @param  \Illuminate\Support\Collection<string,\Sebdesign\ArtisanCloudflare\Zone>  $results
+     * @param  Collection<string,Zone>  $results
      */
     private function getExitCode(Collection $results): int
     {

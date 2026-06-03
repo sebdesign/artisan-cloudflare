@@ -9,6 +9,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Constraint\StringContains;
 use Sebdesign\ArtisanCloudflare\Client;
@@ -18,12 +19,12 @@ trait GuzzleHelpers
     /**
      * Transactions container.
      *
-     * @var \Illuminate\Support\Collection
+     * @var Collection
      */
     protected $transactions;
 
     /**
-     * @var \GuzzleHttp\Handler\MockHandler
+     * @var MockHandler
      */
     protected $handler;
 
@@ -55,7 +56,7 @@ trait GuzzleHelpers
     protected function mockClient(): void
     {
         // Attach a mock handler to the handler stack.
-        $this->handler = new MockHandler();
+        $this->handler = new MockHandler;
         $stack = HandlerStack::create($this->handler);
 
         // Attach the transaction history to the handler stack.
@@ -66,7 +67,7 @@ trait GuzzleHelpers
         $guzzle = new GuzzleClient([
             'handler' => $stack,
             'base_uri' => Client::BASE_URI,
-            \GuzzleHttp\RequestOptions::HEADERS => [
+            RequestOptions::HEADERS => [
                 'X-Auth-Key' => $this->app['config']['cloudflare.key'],
                 'X-Auth-Email' => $this->app['config']['cloudflare.email'],
             ],

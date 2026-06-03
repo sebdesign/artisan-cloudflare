@@ -3,19 +3,18 @@
 namespace Sebdesign\ArtisanCloudflare\Test;
 
 use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\Test;
 
 class CollectionTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->registerServiceProvider();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_transposes_a_collection(): void
     {
         // Arrange
@@ -65,9 +64,7 @@ class CollectionTest extends TestCase
         $this->assertEquals(Collection::make($expected), $actual);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_inserts_a_value_between_items(): void
     {
         // Arrange
@@ -95,9 +92,7 @@ class CollectionTest extends TestCase
         $this->assertEquals(Collection::make($expected), $actual);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_reorders_a_collection(): void
     {
         // Arrange

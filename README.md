@@ -2,10 +2,9 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/sebdesign/artisan-cloudflare.svg?style=flat-square)](https://packagist.org/packages/sebdesign/artisan-cloudflare)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/github/workflow/status/sebdesign/artisan-cloudflare/Tests/master?style=flat-square)](https://github.com/sebdesign/artisan-cloudflare/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/sebdesign/artisan-cloudflare/tests.yml?branch=master&style=flat-square)](https://github.com/sebdesign/artisan-cloudflare/actions)
 [![Quality Score](https://img.shields.io/scrutinizer/g/sebdesign/artisan-cloudflare.svg?style=flat-square)](https://scrutinizer-ci.com/g/sebdesign/artisan-cloudflare)
 [![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/sebdesign/artisan-cloudflare.svg?style=flat-square)](https://scrutinizer-ci.com/g/sebdesign/artisan-cloudflare)
-[![StyleCI](https://styleci.io/repos/74228812/shield?style=flat-square)](https://styleci.io/repos/74228812)
 
 Laravel artisan commands for interacting with the CloudFlare API.
 
@@ -13,13 +12,13 @@ Laravel artisan commands for interacting with the CloudFlare API.
 
 ## Installation
 
-You can install the package via composer. This package requires Laravel 5.5 or higher.
+You can install the package via composer. This package requires Laravel 6.0 or higher.
 
 ``` bash
 composer require sebdesign/artisan-cloudflare
 ```
 
-Since version 5.5, Laravel uses package auto-discovery, so doesn't require you to manually add the ServiceProvider. If you don't use auto-discovery or you are using an older version, add the service provider in `config/app.php`.
+Since version 5.5, Laravel uses package auto-discovery, so doesn't require you to manually add the ServiceProvider. If you don't use auto-discovery, add the service provider in `config/app.php`.
 
 ``` php
 <?php

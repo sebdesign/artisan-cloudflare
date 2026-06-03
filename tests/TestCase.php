@@ -2,6 +2,7 @@
 
 namespace Sebdesign\ArtisanCloudflare\Test;
 
+use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Sebdesign\ArtisanCloudflare\ServiceProvider;
 
@@ -10,7 +11,7 @@ abstract class TestCase extends BaseTestCase
     /**
      * Get package providers.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param  Application  $app
      * @return array
      */
     protected function getPackageProviders($app)
@@ -21,7 +22,7 @@ abstract class TestCase extends BaseTestCase
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param  Application  $app
      * @return void
      */
     protected function getEnvironmentSetUp($app)
@@ -48,10 +49,6 @@ abstract class TestCase extends BaseTestCase
      */
     protected function registerServiceProvider()
     {
-        if (version_compare($this->app->version(), '5.7.0', '>=')) {
-            $this->app->register(new ServiceProvider($this->app), true);
-        } else {
-            $this->app->register(new ServiceProvider($this->app), [], true);
-        }
+        $this->app->register(new ServiceProvider($this->app), true);
     }
 }

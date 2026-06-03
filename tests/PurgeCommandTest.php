@@ -2,6 +2,8 @@
 
 namespace Sebdesign\ArtisanCloudflare\Test;
 
+use PHPUnit\Framework\Attributes\Test;
+
 class PurgeCommandTest extends TestCase
 {
     use ConsoleHelpers, GuzzleHelpers;
@@ -9,16 +11,14 @@ class PurgeCommandTest extends TestCase
     /**
      * Setup the test environment.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->mockClient();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fails_if_no_zone_identifier_is_found(): void
     {
         // Arrange
@@ -37,9 +37,7 @@ class PurgeCommandTest extends TestCase
             ->withoutSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_outputs_an_error_if_the_api_throws_an_exception(): void
     {
         // Arrange
@@ -63,9 +61,7 @@ class PurgeCommandTest extends TestCase
             ->withoutSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_outputs_an_error_if_the_api_returns_an_error(): void
     {
         // Arrange
@@ -95,9 +91,7 @@ class PurgeCommandTest extends TestCase
             ->withoutSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_runs_without_arguments_and_options(): void
     {
         // Arrange
@@ -131,9 +125,7 @@ class PurgeCommandTest extends TestCase
             ->withSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_accepts_an_existing_zone(): void
     {
         // Arrange
@@ -159,9 +151,7 @@ class PurgeCommandTest extends TestCase
             ->withSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_accepts_a_custom_zone(): void
     {
         // Arrange
@@ -188,9 +178,7 @@ class PurgeCommandTest extends TestCase
             ->withSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_accepts_files(): void
     {
         // Arrange
@@ -224,9 +212,7 @@ class PurgeCommandTest extends TestCase
             ->withSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_accepts_tags(): void
     {
         // Arrange
@@ -260,9 +246,7 @@ class PurgeCommandTest extends TestCase
             ->withSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_accepts_hosts(): void
     {
         // Arrange
@@ -296,9 +280,7 @@ class PurgeCommandTest extends TestCase
             ->withSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_accepts_files_and_tags_and_hosts(): void
     {
         // Arrange
@@ -342,9 +324,7 @@ class PurgeCommandTest extends TestCase
             ->withSuccessCode();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_accepts_a_zone_with_files_and_files_and_tags(): void
     {
         // Arrange
